@@ -31,7 +31,7 @@ function HomePage() {
   const people = [
     {
       name: 'Write thesis',
-      link: '/posts/first-post',
+      link: '',
       email: 'leslie.alexander@example.com',
       role: 'Co-Founder / CEO',
       image:
@@ -51,16 +51,6 @@ function HomePage() {
     },
     {
       name: 'Hobbies',
-      link: '',
-      email: 'leslie.alexander@example.com',
-      role: 'Co-Founder / CEO',
-      image:
-        'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-      lastSeen: '3h ago',
-      lastSeenDateTime: '2023-01-23T13:23Z',
-    },
-    {
-      name: 'Task Manager',
       link: '',
       email: 'leslie.alexander@example.com',
       role: 'Co-Founder / CEO',
