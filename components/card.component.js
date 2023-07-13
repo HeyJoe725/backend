@@ -5,7 +5,7 @@ export default function Card({ people }) {
         <ul role="list" className="divide-y divide-gray-100">
             {people.map((person) => (
                 <Link href={person.link}>
-                    <li key={person.email} className="flex justify-between gap-x-6 py-5">
+                    <li key={person.id} className="flex justify-between gap-x-6 py-5">
 
                         <div className="flex gap-x-4">
                             <img

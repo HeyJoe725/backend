@@ -1,0 +1,44 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model KPI {
+  id           Int     @id @default(autoincrement())
+  title        String
+  published    Boolean @default(false)
+  authorId     Int
+  vo           Json[]
+  overStriding Json[]
+  cadence      Json[]
+  Runner       Runner  @relation(fields: [authorId], references: [id])
+}
+
+model Runner {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  image     String?
+  name      String?
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+  KPI       KPI[]
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model User {
+  created_at       DateTime? @default(now()) @db.Timestamptz(6)
+  name             String?   @default("")
+  image            String?   @default("")
+  email            String?
+  link             String?   @default("")
+  lastSeen         DateTime? @db.Time(6)
+  lastSeenDateTime DateTime? @db.Date
+  role             String?
+  id               BigInt    @id @unique @default(autoincrement())
+}
