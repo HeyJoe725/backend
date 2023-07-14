@@ -7,7 +7,7 @@ export default function Card({ people }) {
                 <Link href={person.link}>
                     <li key={person.id} className="flex justify-between gap-x-6 py-5">
 
-                        <div className="flex gap-x-4">
+                        <div key={`${person.id}1d`} className="flex gap-x-4">
                             <img
                                 src={people.image}
                                 alt="React"
@@ -20,7 +20,7 @@ export default function Card({ people }) {
                                 <p className="mt-1 truncate text-xs leading-5 text-gray-500">{person.email}</p>
                             </div>
                         </div>
-                        <div className="hidden sm:flex sm:flex-col sm:items-end">
+                        <div key={`${person.id}2d`} className="hidden sm:flex sm:flex-col sm:items-end">
                             <p className="text-sm leading-6 text-gray-900">{person.role}</p>
                             {person.lastSeen ? (
                                 <p className="mt-1 text-xs leading-5 text-gray-500">

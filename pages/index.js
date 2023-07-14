@@ -1,11 +1,22 @@
 import { useState } from 'react';
-import Link from 'next/link';
+// import Link from 'next/link';
 import Head from 'next/head';
-import Script from 'next/script';
+// import Script from 'next/script';
 import Layout, { siteTitle } from '../components/layout';
 import utilStyles from '../styles/utils.module.css';
 import Card from '../components/card.component';
 import { createClient } from '@supabase/supabase-js'
+
+
+//Client side rendering
+import useSWR from 'swr';
+function Profile() {
+  const { data, error } = useSWR('/api/user', fetch);
+
+  if (error) return <div>failed to load</div>;
+  if (!data) return <div>loading...</div>;
+  return <div>hello {data.name}!</div>;
+}
 
 const supabaseUrl = 'https://sjdfbnxfumfzrtnlovns.supabase.co'
 // const supabaseKey = process.env.SUPABASE_KEY
@@ -19,8 +30,7 @@ async function getPeople() {
   return Runner
 }
 
-
-
+//Static site generation
 export async function getStaticProps() {
   const data = await getPeople()
   const allPostsData = data
@@ -29,6 +39,14 @@ export async function getStaticProps() {
       allPostsData,
     },
   };
+}
+
+export async function getServersideProps(context) {
+  return {
+    props: {
+
+    }
+  }
 }
 
 
@@ -67,8 +85,7 @@ export default function HomePage({ allPostsData }) {
       <Header title="My way to sky🚀" />
       <Card people={allPostsData} />
       <button type='button' className="rounded-full px-6 py-3 bg-gradient-to-r from-gray-400 to-blue-500 hover:from-black-500 hover:to-gray-500" onClick={handleClick}>Like ({likes})</button>
-
-      <dic>{console.log(allPostsData)}</dic>
+      <dic></dic>
     </Layout>
   );
 }
