@@ -2,7 +2,12 @@
 import Image from 'next/image'
 
 const getDogData = async () => {
-    const data = await fetch('https://dog.ceo/api/breeds/image/random')
+    const data = await fetch('https://dog.ceo/api/breeds/image/random',
+        {
+            next: {
+                revalidate: 5,
+            }
+        })
     const json = await data.json()
     return json
 }
