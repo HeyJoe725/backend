@@ -41,3 +41,8 @@
   .lightText {
     color: #666;
   }
+
+  .cen {
+    text-align: center;
+    align-items: center;
+  }
