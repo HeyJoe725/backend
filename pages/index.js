@@ -39,13 +39,13 @@ export async function getStaticProps() {
   };
 }
 
-export async function getServersideProps(context) {
-  return {
-    props: {
+// export async function getServersideProps(context) {
+//   return {
+//     props: {
 
-    }
-  }
-}
+//     }
+//   }
+// }
 
 
 
