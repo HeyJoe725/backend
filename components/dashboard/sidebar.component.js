@@ -9,7 +9,7 @@ function Sidebar({ children }) {
     const [drawerOpen, setDrawerOpen] = useState(false);
 
     return (
-        <div className={` ${drawerOpen ? 'pl-12' : ''}`}>
+        <div className={`transition-all duration-500 ${drawerOpen ? 'pl-12' : ''}`}>
             <input
                 type="checkbox"
                 id="drawer-toggle"
@@ -19,10 +19,10 @@ function Sidebar({ children }) {
             />
             <label
                 htmlFor="drawer-toggle"
-                className={`fixed initial h-[10%] top-0 left-0 inline-block p-4 transition-all duration-500 bg-black z-40 rounded-lg ${drawerOpen ? 'rotate-180' : ''}`}
+                className={`fixed initial top-0 left-0 inline-block p-3 transition-all duration-500 bg-blue-300 z-40 rounded-lg ${drawerOpen ? 'rotate-180  p-5 pl-5 pr-5' : ''}`}
             >
-                <div className="w-6 h-1 mb-3 -rotate-45 bg-white rounded-lg"></div>
-                <div className="w-6 h-1 rotate-45 bg-white rounded-lg"></div>
+                <div className="w-4 h-1 mb-1.5 -rotate-45 bg-white rounded-lg"></div>
+                <div className="w-4 h-1 rotate-45 bg-white rounded-lg"></div>
             </label>
 
             <div className='fixed top-0 left-0 z-20  h-full transition-all duration-500 transform -translate-x-full bg-white shadow-lg peer-checked:translate-x-0 '>
