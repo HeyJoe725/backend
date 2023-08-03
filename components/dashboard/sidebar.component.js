@@ -9,17 +9,17 @@ function Sidebar({ children }) {
     const [drawerOpen, setDrawerOpen] = useState(false);
 
     return (
-        <div className="flex">
+        <div className={` ${drawerOpen ? 'pl-12' : ''}`}>
             <input
                 type="checkbox"
                 id="drawer-toggle"
-                className="relative sr-only peer"
+                className=" sr-only peer"
                 checked={drawerOpen}
                 onChange={() => setDrawerOpen(!drawerOpen)}
             />
             <label
                 htmlFor="drawer-toggle"
-                className={`initial h-[15%] w-15 top-0 left-0 inline-block p-4 transition-all duration-500 bg-black z-40 rounded-lg ${drawerOpen ? 'rotate-180  left-64' : ''}`}
+                className={`fixed initial h-[10%] top-0 left-0 inline-block p-4 transition-all duration-500 bg-black z-40 rounded-lg ${drawerOpen ? 'rotate-180' : ''}`}
             >
                 <div className="w-6 h-1 mb-3 -rotate-45 bg-white rounded-lg"></div>
                 <div className="w-6 h-1 rotate-45 bg-white rounded-lg"></div>
