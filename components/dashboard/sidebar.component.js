@@ -10,7 +10,7 @@ import ClickableIcon from './clickableicon.component';
 function Sidebar({ children }) {
     const [drawerOpen, setDrawerOpen] = useState(false);
     const icons = [FaNetworkWired, BsFillFileEarmarkPostFill, BiTask];
-    const urls = ['/#', '/posts/dogs', '/#'];
+    const urls = ['#', '/posts/dogs', '#'];
     const names = ['Projects', 'Posts', 'Manager'];
 
     return (
