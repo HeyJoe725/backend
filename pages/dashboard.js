@@ -1,22 +1,32 @@
 import Head from 'next/head'
 import Layout from '../components/layout'
+import Sidebar from '../components/dashboard/sidebar.component'
+import TopCard from '../components/dashboard/topbar.component'
+import BarChart from '../components/dashboard/barchart.component'
+import RecentData from '../components/dashboard/recentdata.component'
 
 export default function Dashboard() {
     return (
-        <Layout>
+        <Sidebar >
+            {/* <Layout> */}
             <Head>
                 <title>Dashboard</title>
             </Head>
-            <main>
-                <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-                    {/* Replace with your content */}
-                    <div className="px-4 py-6 sm:px-0">
-                        <div className="border-4 border-dashed border-gray-200 rounded-lg h-96" />
-                    </div>
-                    {/* /End replace */}
+            <main className=''>
+                <TopCard />
+
+                <div className='p-4 grid md:grid-cols-4 grid-cols-1 gap-4'>
+                    <BarChart />
+                    <BarChart />
+                    <RecentData />
+
                 </div>
+
+                {/* <Sidebar /> */}
+
             </main>
-        </Layout>
+            {/* </Layout> */}
+        </Sidebar>
     )
 }
 

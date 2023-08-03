@@ -1,4 +1,5 @@
 import '../styles/global.css'
+import Sidebar from '../components/dashboard/sidebar.component'
 
 export default function App({ Component, pageProps }) {
     return <Component {...pageProps} />
