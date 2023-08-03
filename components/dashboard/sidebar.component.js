@@ -19,13 +19,13 @@ function Sidebar({ children }) {
             />
             <label
                 htmlFor="drawer-toggle"
-                className={`fixed opacity-60 initial top-0 left-0 inline-block p-3 transition-all duration-500 bg-black z-40 rounded-lg ${drawerOpen ? 'rotate-180  pt-5 pb-5 ml-[1.19px]' : ''}`}
+                className={`fixed  initial inline-block p-3 transition-all duration-500 bg-black z-40 rounded-full ${drawerOpen ? 'rotate-180  pt-5 pb-5 ml-[1.19px] top-0 left-0' : 'top-2 left-1 opacity-60'}`}
             >
                 <div className={`h-1 -rotate-45 bg-white rounded-lg ${drawerOpen ? 'w-[35px] -mb-[4px] ' : 'w-4 mb-1.5 '}`}></div>
                 <div className={`h-1 rotate-45 bg-white rounded-lg ${drawerOpen ? 'w-[35px]' : 'w-4 '}`}></div>
             </label>
 
-            <div className='fixed w-15 top-0 left-0 z-20  h-full transition-all duration-500 transform -translate-x-full bg-black shadow-lg peer-checked:translate-x-0 '>
+            <div className='rounded-lg fixed w-15 top-0 left-0 z-20  h-full transition-all duration-500 transform -translate-x-full bg-black shadow-lg peer-checked:translate-x-0 '>
                 <div className='flex flex-col space-y-4 '>
                     <Link href='/'>
                         <div className='bg-blue-100 rounded-lg inline-block text-black'>
