@@ -2,7 +2,7 @@
 // Boolean home prop which will adjust the size of the title and the image
 // “Back to home” link at the bottom if home is false
 // Added images with next/image, which are preloaded with the priority attribute
-
+'use client'
 import Head from 'next/head';
 import Image from 'next/image';
 import styles from './layout.module.css';
@@ -10,11 +10,17 @@ import utilStyles from '../styles/utils.module.css';
 import Link from 'next/link';
 import NavigationBar from './navegationbar.component';
 import Footer from './footer.component';
+import { useRef, useEffect } from 'react';
 
 const name = 'Jose Gavilanes';
 export const siteTitle = 'Next.js Sample Website';
 
 export default function Layout({ children, home }) {
+    useEffect(() => {
+        // window is accessible here.
+        console.log("window.innerHeight", window.innerHeight);
+    }, []);
+
     return (
         <>
             <NavigationBar />

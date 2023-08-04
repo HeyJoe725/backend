@@ -15,7 +15,7 @@ function classNames(...classes) {
 
 export default function NavegationBar() {
     return (
-        <Disclosure as="nav" className="bg-gray-800">
+        <Disclosure as="nav" className="bg-gray-800 fixed w-full top-0 ">
             {({ open }) => (
                 <>
                     <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -40,7 +40,7 @@ export default function NavegationBar() {
                                     />
                                     <img
                                         className="hidden h-8 w-auto lg:block"
-                                        src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
+                                        src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=5"
                                         alt="Your Company"
                                     />
                                 </div>
