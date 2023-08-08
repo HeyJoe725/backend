@@ -10,27 +10,28 @@ datasource db {
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model KPI {
   id           Int     @id @default(autoincrement())
-  title        String
+  title        String?
   published    Boolean @default(false)
-  authorId     Int
-  vo           Json[]
-  overStriding Json[]
-  cadence      Json[]
+  authorId     Int     @default(0)
+  vo           Json?
+  overStriding Json?
+  cadence      Json?
   Runner       Runner  @relation(fields: [authorId], references: [id])
 }
 
 model Runner {
   id        Int      @id @default(autoincrement())
-  email     String   @unique
+  email     String?  @unique
   image     String?
   name      String?
-  password  String
+  password  String?
+  vo        Json?
   createdAt DateTime @default(now())
-  updatedAt DateTime
+  updatedAt DateTime @default(now())
+  cadence   Json?
   KPI       KPI[]
 }
 
-/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model User {
   created_at       DateTime? @default(now()) @db.Timestamptz(6)
   name             String?   @default("")
@@ -40,5 +41,5 @@ model User {
   lastSeen         DateTime? @db.Time(6)
   lastSeenDateTime DateTime? @db.Date
   role             String?
-  id               BigInt    @id @unique @default(autoincrement())
+  id               Int       @id @default(autoincrement())
 }

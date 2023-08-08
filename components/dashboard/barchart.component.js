@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
 import { Bar } from 'react-chartjs-2';
+
 import {
     Chart,
     CategoryScale,
@@ -19,18 +19,21 @@ Chart.register(
     Title,
 );
 
+export default function BarChart({ cadenceArray, title, labels }) {
 
-
-function BarChart(props) {
-
-    const [chartData, setChartData] = useState({
-        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+    const chartData = {
+        labels: [],
         datasets: [
             {
-                label: 'Rain',
-                data: [12, 19, 3, 5, 2, 3],
+                label: title,
+                data: cadenceArray,
                 backgroundColor: [
-                    'rgba(255, 102, 25, 0.2)',
+
+                    'rgba(255, 12, 25, 0.2)',
+                    'rgba(245, 102, 25, 0.8)',
+
+                    'rgba(245, 10, 25, 0.8)',
+
                 ],
                 borderColor: [
                     'rgba(255, 99, 132, 1)',
@@ -39,33 +42,41 @@ function BarChart(props) {
             },
         ],
 
-    });
+    };
 
-    const [chartOptions, setChartOptions] = useState({
+    const chartOptions = {
         plugins: {
             legend: {
                 position: 'top',
             },
             title: {
                 display: true,
-                text: 'Chart.js Bar Chart',
+                text: title,
             },
         },
         maintainAspectRatio: false,
         responsive: true,
         scales: {
             x: {
+                title: {
+                    display: true,
+                    text: labels?.x,
+                },
                 grid: {
                     display: false,
                 },
             },
             y: {
+                title: {
+                    display: true,
+                    text: labels?.y,
+                },
                 grid: {
                     display: true,
                 },
             },
         },
-    });
+    };
 
 
     return (
@@ -75,4 +86,3 @@ function BarChart(props) {
     );
 }
 
-export default BarChart;

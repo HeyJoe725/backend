@@ -15,7 +15,7 @@ function TopCard(props) {
             <div className='lg:col-span-2 col-span-1 bg-white flex justify-between w-full border p-4 rounded-lg' >
                 2
             </div>
-            <div className=' bg-white flex justify-between w-full border p-4 rounded-lg' >
+            {/* <div className=' bg-white flex justify-between w-full border p-4 rounded-lg' >
                 3
             </div>
             <div className='bg-gray-300 flex w-full border p-4 rounded-lg justify-between'>
@@ -26,7 +26,7 @@ function TopCard(props) {
             </div>
             <div className='bg-gray-300 w-full p-4 border flex rounded-lg justify-between'>
                 6
-            </div>
+            </div> */}
         </div>
     );
 }

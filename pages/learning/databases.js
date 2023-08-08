@@ -8,6 +8,7 @@ export default function Databases() {
         'Prisma': 'https://www.prisma.io/docs/getting-started/quickstart',
         'Vercel My Projects': 'https://vercel.com/heyjoe725/nextbackend/stores',
         'My Vercel API': 'https://nextbackend-taupe.vercel.app/api/hello',
+        "Setting up Prisma": "https://www.youtube.com/watch?v=_ER9jHiylAo",
 
     }
 
