@@ -121,7 +121,7 @@ export default function ScatterGraph({ data, title, labels }) {
                 ticks: {
                     min: 0,  // or whatever minimum value you want
                     max: Math.max(...data.values) + 1,  // you might adjust this depending on your data
-                    stepSize: 1,  // adjust this if needed
+                    stepSize: 5,  // adjust this if needed
                     font: {
                         weight: 'normal'  // default weight
                     },
