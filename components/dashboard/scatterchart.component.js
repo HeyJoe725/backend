@@ -1,5 +1,7 @@
 import React from 'react';
 import { Scatter } from 'react-chartjs-2';
+import annotation from 'chartjs-plugin-annotation';
+
 
 import {
     Chart,
@@ -11,7 +13,9 @@ import {
     Title,
 } from 'chart.js';
 
+
 Chart.register(
+    annotation,
     CategoryScale,
     LinearScale,
     PointElement,
@@ -55,7 +59,44 @@ export default function ScatterGraph({ data, title, labels }) {
                 display: true,
                 text: title,
             },
+            annotation: {
+                annotations: [
+                    {
+                        type: 'box',
+                        yScaleID: 'y',
+                        yMin: 5,
+                        yMax: 10,
+                        backgroundColor: 'rgba(0, 255, 0, 0.1)', // Color to fill the area between y = 5 and y = 10
+                    },
+                    {
+                        type: 'line',
+                        mode: 'horizontal',
+                        scaleID: 'y',
+                        value: 10,
+                        borderColor: 'rgb(76, 255, 0)',
+                        borderWidth: 2,
+                        label: {
+                            enabled: true,
+                            content: 'y = 10',
+                        }
+                    },
+                    {
+                        type: 'line',
+                        mode: 'horizontal',
+                        scaleID: 'y',
+                        value: 5,
+                        borderColor: 'rgb(76, 255, 0)',
+                        borderWidth: 2,
+                        label: {
+                            enabled: true,
+                            content: 'y = 5',
+                        }
+                    }
+                ]
+            }
+
         },
+
         maintainAspectRatio: false,
         responsive: true,
         scales: {
@@ -76,13 +117,41 @@ export default function ScatterGraph({ data, title, labels }) {
                 grid: {
                     display: false,
                 },
-            },
+
+                ticks: {
+                    min: 0,  // or whatever minimum value you want
+                    max: Math.max(...data.values) + 1,  // you might adjust this depending on your data
+                    stepSize: 1,  // adjust this if needed
+                    font: {
+                        weight: 'normal'  // default weight
+                    },
+                    callback: function (value, index, values) {
+                        if (value === 5 || value === 10) {
+                            // Return the custom label
+                            return `y = ${value}`;
+                        }
+                        return value;
+                    },
+
+                    font: function (context) {
+                        const value = context.tick ? context.tick.value : undefined;
+                        if (value === 5 || value === 10) {
+                            return {
+                                weight: 'bold',
+                                size: 16,
+                            };
+                        }
+                        return {};
+                    },
+
+                }
+            }
         },
     };
 
     return (
-        <div className='w-full bg-gray-50 w-full md:col-span-2 relative m-auto rounded-lg p-4 h-[50vh] lg:h-[70vh]'>
+        <div className='w-full bg-gray-50 w-full md:col-span-2 relative m-auto rounded-lg p-4 h-[50vh] lg:h-[70vh]' >
             <Scatter data={chartData} options={chartOptions} />
-        </div>
+        </div >
     );
 }
