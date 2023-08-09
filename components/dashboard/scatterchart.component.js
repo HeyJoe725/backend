@@ -1,10 +1,11 @@
-import { Bar } from 'react-chartjs-2';
+import React from 'react';
+import { Scatter } from 'react-chartjs-2';
 
 import {
     Chart,
     CategoryScale,
     LinearScale,
-    BarElement,
+    PointElement,
     Tooltip,
     Legend,
     Title,
@@ -13,28 +14,36 @@ import {
 Chart.register(
     CategoryScale,
     LinearScale,
-    BarElement,
+    PointElement,
     Tooltip,
     Legend,
     Title,
 );
 
-export default function BarChart({ cadenceArray, title, labels, colors }) {
+export default function ScatterGraph({ data, title, labels }) {
 
+    const scatterDataPoints = data.labels.map((label, index) => ({
+        x: label,
+        y: data.values[index]
+    }));
+
+    // Define colors for each data point
+    const colors = scatterDataPoints.map((point, index) => {
+        if (point.y >= 5 && point.y <= 10) return '#00ff00';
+        return 'red';
+
+
+    });
     const chartData = {
-        labels: [],
         datasets: [
             {
                 label: title,
-                data: cadenceArray,
+                data: scatterDataPoints,
                 backgroundColor: colors,
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                ],
+                borderColor: 'rgba(255, 99, 132, 0)',
                 borderWidth: 2,
-            },
+            }
         ],
-
     };
 
     const chartOptions = {
@@ -56,7 +65,7 @@ export default function BarChart({ cadenceArray, title, labels, colors }) {
                     text: labels?.x,
                 },
                 grid: {
-                    display: false,
+                    display: true,
                 },
             },
             y: {
@@ -65,17 +74,15 @@ export default function BarChart({ cadenceArray, title, labels, colors }) {
                     text: labels?.y,
                 },
                 grid: {
-                    display: true,
+                    display: false,
                 },
             },
         },
     };
 
-
     return (
         <div className='w-full bg-gray-50 w-full md:col-span-2 relative m-auto rounded-lg p-4 h-[50vh] lg:h-[70vh]'>
-            <Bar data={chartData} options={chartOptions} />
+            <Scatter data={chartData} options={chartOptions} />
         </div>
     );
 }
-
