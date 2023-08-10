@@ -1,8 +1,6 @@
 import React from 'react';
 import { Scatter } from 'react-chartjs-2';
 import annotation from 'chartjs-plugin-annotation';
-
-
 import {
     Chart,
     CategoryScale,
@@ -12,7 +10,6 @@ import {
     Legend,
     Title,
 } from 'chart.js';
-
 
 Chart.register(
     annotation,
@@ -26,18 +23,17 @@ Chart.register(
 
 export default function ScatterGraph({ data, title, labels }) {
 
-    const scatterDataPoints = data.labels.map((label, index) => ({
-        x: label,
-        y: data.values[index]
-    }));
+    const scatterDataPoints = data;
+
+
+
 
     // Define colors for each data point
-    const colors = scatterDataPoints.map((point, index) => {
+    const colors = scatterDataPoints.map(point => {
         if (point.y >= 5 && point.y <= 10) return '#00ff00';
         return 'red';
-
-
     });
+
     const chartData = {
         datasets: [
             {
@@ -66,7 +62,7 @@ export default function ScatterGraph({ data, title, labels }) {
                         yScaleID: 'y',
                         yMin: 5,
                         yMax: 10,
-                        backgroundColor: 'rgba(0, 255, 0, 0.1)', // Color to fill the area between y = 5 and y = 10
+                        backgroundColor: 'rgba(0, 255, 0, 0.1)',
                     },
                     {
                         type: 'line',
@@ -94,13 +90,12 @@ export default function ScatterGraph({ data, title, labels }) {
                     }
                 ]
             }
-
         },
-
         maintainAspectRatio: false,
         responsive: true,
         scales: {
             x: {
+                type: 'category',
                 title: {
                     display: true,
                     text: labels?.x,
@@ -108,6 +103,9 @@ export default function ScatterGraph({ data, title, labels }) {
                 grid: {
                     display: true,
                 },
+                ticks: {
+                    maxTicksLimit: 10  // Show a maximum of 10 ticks on the x-axis
+                }
             },
             y: {
                 title: {
@@ -117,22 +115,19 @@ export default function ScatterGraph({ data, title, labels }) {
                 grid: {
                     display: false,
                 },
-
                 ticks: {
-                    min: 0,  // or whatever minimum value you want
-                    max: Math.max(...data.values) + 1,  // you might adjust this depending on your data
-                    stepSize: 5,  // adjust this if needed
+                    min: 0,
+                    max: Math.max(...scatterDataPoints.map(point => point.y)) + 1,
+                    stepSize: 5,
                     font: {
-                        weight: 'normal'  // default weight
+                        weight: 'normal'
                     },
                     callback: function (value, index, values) {
                         if (value === 5 || value === 10) {
-                            // Return the custom label
                             return `y = ${value}`;
                         }
                         return value;
                     },
-
                     font: function (context) {
                         const value = context.tick ? context.tick.value : undefined;
                         if (value === 5 || value === 10) {
@@ -143,15 +138,14 @@ export default function ScatterGraph({ data, title, labels }) {
                         }
                         return {};
                     },
-
                 }
             }
         },
     };
 
     return (
-        <div className='w-full bg-gray-50 w-full md:col-span-2 relative m-auto rounded-lg p-4 h-[50vh] lg:h-[70vh]' >
+        <div className='w-full bg-gray-50 w-full md:col-span-2 relative m-auto rounded-lg p-4 h-[50vh] lg:h-[70vh]'>
             <Scatter data={chartData} options={chartOptions} />
-        </div >
+        </div>
     );
 }
