@@ -19,6 +19,8 @@ export default function Dashboard() {
     const [verticalArray, setVerticalArray] = useState([]);
     const [showScatter, setShowScatter] = useState(false);
     const [framesPerSecond, setFramesPerSecond] = useState(300);
+    const [xRange, setXRange] = useState(framesPerSecond);
+
 
     const toggleGraph = () => {
         setShowScatter(!showScatter);
@@ -147,8 +149,10 @@ export default function Dashboard() {
 
 
     const handleSliderChange = (e) => {
-        const index = e.target.value - 1;  // Because arrays are 0-based
-        setFramesPerSecond(validValues[index]);
+        const index = e.target.value - 1;
+        const selectedValue = validValues[index];
+        setFramesPerSecond(selectedValue);
+        setXRange(selectedValue);
     };
     return (
         <Sidebar>
@@ -171,7 +175,7 @@ export default function Dashboard() {
                         {!showScatter && (
                             <div className="absolute top-16 right-4 z-20">
                                 <label htmlFor="framesPerSecond" className="block text-sm font-medium text-gray-700 mb-2">
-                                    {framesPerSecond === 1800 ? "Minutes: 1" : `Seconds: ${framesPerSecond / 30}`}
+                                    {framesPerSecond === 1800 ? "time(minutes: 1)" : `time(seconds: ${framesPerSecond / 30})`}
                                 </label>
 
                                 <div className="relative">
@@ -194,7 +198,11 @@ export default function Dashboard() {
                                 :
                                 <div className="flex justify-center items-center h-full text-lg font-semibold">Loading graph...</div>
                         ) : (
-                            <BarChart colors={c1_colors} cadenceArray={c1} title='Vertical Displacement' labels={{ 'x': 'time (min)', 'y': 'Steps' }} />
+                            <BarChart
+                                colors={c1_colors}
+                                cadenceArray={c1}
+                                title='Vertical Displacement'
+                                labels={{ 'x': 'time', 'y': 'Steps' }} />
                         )}
                     </div>
                 </div>
