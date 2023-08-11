@@ -31,7 +31,7 @@ export default function BarChart({ cadenceArray, title, labels, colors }) {
                 borderColor: [
                     'rgba(255, 99, 132, 1)',
                 ],
-                borderWidth: 2,
+                borderWidth: 0,
             },
         ],
 
