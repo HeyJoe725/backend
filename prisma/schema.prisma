@@ -20,16 +20,18 @@ model KPI {
 }
 
 model Runner {
-  id        Int      @id @default(autoincrement())
-  email     String?  @unique
-  image     String?
-  name      String?
-  password  String?
-  vo        Json?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
-  cadence   Json?
-  KPI       KPI[]
+  id           Int      @id @default(autoincrement())
+  email        String?  @unique
+  image        String?
+  name         String?
+  password     String?
+  vo           Json?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @default(now())
+  cadence      Json?
+  overstriding Json?
+  hey          Int?     @db.SmallInt
+  KPI          KPI[]
 }
 
 model User {

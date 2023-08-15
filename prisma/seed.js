@@ -8,6 +8,7 @@ async function main() {
         update: {},
         create: {
             name: 'Nunner',
+            overstriding: null,
 
         },
 

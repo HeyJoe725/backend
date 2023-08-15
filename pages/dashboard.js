@@ -7,45 +7,43 @@ import { useState, useEffect } from 'react';
 import ScatterGraph from '../components/dashboard/scatterchart.component'
 import Runner from '../components/runner'
 import styles from '../styles/dashboard.css'
-
+import GraphType from '../components/dashboard/graphtype.component'
+// import DataTypeSelector from '../components/dashboard/datatypeselector.component'
 
 export default function Dashboard() {
     console.clear();
+    const myName = "Testing10";
     const second = 1;
     const frames = 30;
     const minute = 60;
-    const [runners, setRunners] = useState([]);
+    // const [runners, setRunners] = useState([]);
     const [cadenceArray, setCadenceArray] = useState([]);
     const [verticalArray, setVerticalArray] = useState([]);
+    const [overstridingArray, setOverstridingArray] = useState([]);
     const [showScatter, setShowScatter] = useState(false);
     const [framesPerSecond, setFramesPerSecond] = useState(300);
-    const [xRange, setXRange] = useState(framesPerSecond);
+    const [currentDataType, setCurrentDataType] = useState('cadence');
 
 
-    const toggleGraph = () => {
-        setShowScatter(!showScatter);
-    };
     useEffect(() => {
         async function fetchRunners() {
             try {
-                const res = await fetch('/api/runners');
+                const res = await fetch(`/api/runners?name=${myName}`)
                 const newRunners = await res.json();
+                const cadences = newRunners.cadence;
+                const verticals = newRunners.vo;
+                const overstrides = newRunners.overstriding;
+                setVerticalArray(verticals);
+                setCadenceArray(cadences);
+                setOverstridingArray(overstrides);
 
-                if (Array.isArray(newRunners)) {
-                    setRunners(newRunners);
-                    const cadences = newRunners.map(runner => runner.cadence).flat();
-                    const verticals = newRunners.map(runner => runner.vo).flat();
-                    setVerticalArray(verticals);
-                    setCadenceArray(cadences);
-                } else {
-                    console.error("Fetched data is not an array:", newRunners);
-                }
             } catch (error) {
                 console.error("Error fetching runners:", error);
             }
         }
         fetchRunners();
     }, []);
+
 
     // function secondsToTimeFormat(seconds) {
     //     const minutes = Math.floor(seconds / 60);
@@ -94,36 +92,31 @@ export default function Dashboard() {
     }
 
 
-    let scatterDataPoints = Object.entries(verticalArray[0] || {}).map(([x, y]) => ({ x: parseInt(x), y }));
-    console.log('scatterDataPoints before', scatterDataPoints);
+    let scatterDataPoints = Object.entries(verticalArray || {}).map(([x, y]) => ({ x: parseInt(x), y }));
     let scatterDataPointsMin = framesToSeconds(scatterDataPoints);
-    console.log('scatterDataPoints after', scatterDataPoints);
-    console.log('ssssss', scatterDataPoints);
 
 
     for (let n in scatterDataPoints) {
         let seconds = (scatterDataPoints[n].x * second) / frames;
         scatterDataPoints[n].x = secondsToTimeFormat(seconds);
     }
-    console.log('indices', scatterDataPoints);
 
 
     let current_key = 0;
     const c = {};
     const CADENCE_BOUNDARY = 153;
-    cadenceArray.map((innerArray) => {
-        for (let k in innerArray) {
-            if ((parseInt(k) % minute) === 0) {
-                current_key += 1;
-                let c_key = String(current_key);
-                c[c_key] = (innerArray[k] * 2);
-            } else {
-                c[String(current_key)] += (innerArray[k] * 2);
-            }
-        }
-    });
 
-    console.log('c', c);
+    for (let k in cadenceArray) {
+        if ((parseInt(k) % minute) === 0) {
+            current_key += 1;
+            let c_key = String(current_key);
+            c[c_key] = (cadenceArray[k] * 2);
+        } else {
+            c[String(current_key)] += (cadenceArray[k] * 2);
+        }
+    }
+
+
     let colors = [];
     for (let k in c) {
         if (c[k] > CADENCE_BOUNDARY) {
@@ -145,14 +138,57 @@ export default function Dashboard() {
     }
 
     const validValues = [30, 150, 300, 600, 900, 1800];
-    const displayValues = ['1', '5', '10', '20', '30', '1m'];
 
 
     const handleSliderChange = (e) => {
         const index = e.target.value - 1;
         const selectedValue = validValues[index];
         setFramesPerSecond(selectedValue);
-        setXRange(selectedValue);
+    };
+
+
+    let overstriding = {};
+    for (let k in overstridingArray) {
+        if ((parseInt(k) % minute) === 0) {
+            current_key += 1;
+            let c_key = String(current_key);
+            overstriding[c_key] = overstridingArray[k];
+        } else {
+            overstriding[String(current_key)] += overstridingArray[k];
+        }
+    }
+    overstriding = overstridingArray;
+    const OVERSTRIDING_BOUNDARY = 7; // Adjust this value as needed
+    let overstriding_colors = [];
+    for (let k in overstriding) {
+        if (overstriding[k] > OVERSTRIDING_BOUNDARY) {
+            overstriding_colors.push('rgba(0, 0, 255, 0.8)');
+        } else {
+            overstriding_colors.push('rgba(255, 165, 0, 0.7)');
+        }
+    }
+
+    const overstridingData = {
+        colors: overstriding_colors,
+        data: overstridingArray,
+        title: 'Overstriding',
+        labels: { 'x': 'time (min)', 'y': 'Overstride Value' } // Adjust y-label as per your data's unit
+    };
+
+
+
+    const cadenceData = {
+        colors: colors,
+        data: c,
+        title: 'Cadence',
+        labels: { 'x': 'time (min)', 'y': 'Steps' }
+    };
+
+    const verticalOscillationData = {
+        colors: c1_colors,  // Assuming you have defined this
+        data: c1,  // Assuming you have defined this
+        title: 'Vertical Oscillation',
+        labels: { 'x': 'time (min)', 'y': 'Oscillation (cm)' }
     };
     return (
         <Sidebar>
@@ -162,18 +198,49 @@ export default function Dashboard() {
             <main className=''>
                 <RecentData />
                 <div className='p-4 grid md:grid-cols-4 grid-cols-1 gap-4'>
-                    <div className="w-full bg-gray-50 md:col-span-2 relative m-auto rounded-lg p-6 h-[50vh] lg:h-[70vh] overflow-hidden">
-                        <BarChart colors={colors} cadenceArray={c} title='Cadence' labels={{ 'x': 'time (min)', 'y': 'Steps' }} />
-                    </div>
-                    <div className="w-full bg-gray-50 md:col-span-2 relative m-auto rounded-lg p-6 h-[50vh] lg:h-[70vh] overflow-hidden">
+
+
+
+                    {/* Data type selector */}
+                    <div className="flex flex-col space-y-4 p-4 border rounded">
+                        <p>Data Type</p>
+
                         <button
-                            onClick={toggleGraph}
-                            className="absolute top-4 right-4 bg-gray-700 hover:bg-gray-600 text-white text-sm px-3 py-1 border-2 border-red-500 rounded z-10 transition duration-200"
+                            onClick={() => setCurrentDataType('vertical oscillation')}
+                            className={`p-2 rounded focus:outline-none focus:ring-2 focus:ring-offset-2 ${currentDataType === 'vertical oscillation' ? 'bg-black text-white' : 'hover:bg-gray-200 '}`}
                         >
-                            {showScatter ? "BarChart" : "Scatter"}
+                            Vertical Oscillation
                         </button>
-                        {!showScatter && (
-                            <div className="absolute top-16 right-4 z-20">
+                        <button
+                            onClick={() => setCurrentDataType('overstriding')}
+                            className={`p-2 rounded focus:outline-none focus:ring-2 focus:ring-offset-2 ${currentDataType === 'overstriding' ? 'bg-black text-white' : 'hover:bg-gray-200 '}`}
+                        >
+                            Overstriding
+                        </button>
+                        <button
+                            onClick={() => setCurrentDataType('cadence')}
+                            className={`p-2 rounded focus:outline-none focus:ring-2 focus:ring-offset-2 ${currentDataType === 'cadence' ? 'bg-black text-white' : 'hover:bg-gray-200'}`}
+                        >
+                            Cadence
+                        </button>
+                    </div>
+
+
+
+
+                    <div className="w-full  bg-gray-50 md:col-span-2 relative m-auto rounded-lg p-6 h-[50vh] lg:h-[75vh] overflow-hidden">
+                        {
+                            currentDataType === 'vertical oscillation' ? (
+                                <div className="flex justify-center space-x-2 " >
+                                    <p>Graph Type</p>
+                                    <GraphType
+                                        onTypeChange={(type) => setShowScatter(type === 'scatter')}
+                                    />
+                                </div>
+                            ) : null
+                        }
+                        {!showScatter && currentDataType === 'vertical oscillation' && (
+                            <div className="absolute top-14 right-4 z-20">
                                 <label htmlFor="framesPerSecond" className="block text-sm font-medium text-gray-700 mb-2">
                                     {framesPerSecond === 1800 ? "time(minutes: 1)" : `time(seconds: ${framesPerSecond / 30})`}
                                 </label>
@@ -192,23 +259,44 @@ export default function Dashboard() {
                                 </div>
                             </div>
                         )}
-                        {showScatter ? (
+
+                        {(showScatter && (currentDataType === 'vertical oscillation')) ? (
                             scatterDataPoints.length > 0 ?
                                 <ScatterGraph data={scatterDataPoints} title="Vertical Displacement" labels={{ x: "time", y: "Vertical Displacement (cm)" }} />
                                 :
                                 <div className="flex justify-center items-center h-full text-lg font-semibold">Loading graph...</div>
                         ) : (
                             <BarChart
-                                colors={c1_colors}
-                                cadenceArray={c1}
-                                title='Vertical Displacement'
-                                labels={{ 'x': 'time', 'y': 'Steps' }} />
+                                colors={
+                                    currentDataType === 'cadence' ? cadenceData.colors :
+                                        currentDataType === 'vertical oscillation' ? verticalOscillationData.colors :
+                                            overstridingData.colors
+                                }
+                                cadenceArray={
+                                    currentDataType === 'cadence' ? cadenceData.data :
+                                        currentDataType === 'vertical oscillation' ? verticalOscillationData.data :
+                                            overstridingData.data
+                                }
+                                title={
+                                    currentDataType === 'cadence' ? cadenceData.title :
+                                        currentDataType === 'vertical oscillation' ? verticalOscillationData.title :
+                                            overstridingData.title
+                                }
+                                labels={
+                                    currentDataType === 'cadence' ? cadenceData.labels :
+                                        currentDataType === 'vertical oscillation' ? verticalOscillationData.labels :
+                                            overstridingData.labels
+                                }
+                            />
                         )}
                     </div>
                 </div>
             </main>
+            <div className='p-4 grid md:grid-cols-4 grid-cols-1 gap-4'>
+            </div>
         </Sidebar>
     );
+
 
 
 

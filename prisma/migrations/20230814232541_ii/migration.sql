@@ -21,6 +21,9 @@ CREATE TABLE "Runner" (
     "vo" JSONB,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "cadence" JSONB,
+    "overstriding" JSONB,
+    "hey" SMALLINT,
 
     CONSTRAINT "Runner_pkey" PRIMARY KEY ("id")
 );

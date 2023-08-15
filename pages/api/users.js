@@ -14,7 +14,7 @@ export default async function handler(req, res) {
             const users = await prisma.user.findMany();
             res.status(200).json(JSON.parse(JSON.stringify(users, replacer)));
         } catch (error) {
-            console.log('fdsfsefes' + error)
+
             res.status(500).json({ error: "Unable to fetch users." });
         }
     } else {
