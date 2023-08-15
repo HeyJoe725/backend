@@ -1,9 +1,11 @@
-import { Bar } from 'react-chartjs-2';
+import { Bar, Line } from 'react-chartjs-2';
 
 import {
+
     Chart,
     CategoryScale,
     LinearScale,
+    LineElement,
     BarElement,
     Tooltip,
     Legend,
@@ -14,6 +16,7 @@ Chart.register(
     CategoryScale,
     LinearScale,
     BarElement,
+    LineElement,
     Tooltip,
     Legend,
     Title,
@@ -33,6 +36,16 @@ export default function BarChart({ cadenceArray, title, labels, colors }) {
                 ],
                 borderWidth: 0,
             },
+
+            // {
+            //     type: 'line',
+            //     label: 'Line Dataset',
+            //     data: cadenceArray, // same as bar data for top border
+            //     fill: false,
+            //     borderColor: 'rgb(75, 192, 192)',
+            //     tension: 0.1, // this makes the line smooth
+            //     borderWidth: 2 // thicker line width for emphasis
+            // }
         ],
 
     };

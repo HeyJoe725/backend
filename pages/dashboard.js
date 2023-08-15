@@ -10,9 +10,31 @@ import styles from '../styles/dashboard.css'
 import GraphType from '../components/dashboard/graphtype.component'
 // import DataTypeSelector from '../components/dashboard/datatypeselector.component'
 
+
+function removeOutliers(dataObj, k = 1.5) {
+    const values = Object.values(dataObj);
+    values.sort((a, b) => a - b);
+
+    const q1 = values[Math.floor(values.length / 4)];
+    const q3 = values[Math.floor(3 * values.length / 4)];
+    const iqr = q3 - q1;
+
+    const lowerBound = q1 - k * iqr;
+    const upperBound = q3 + k * iqr;
+
+    const filteredData = {};
+    for (const key in dataObj) {
+        if (dataObj[key] >= lowerBound && dataObj[key] <= upperBound) {
+            filteredData[key] = dataObj[key];
+        }
+    }
+
+    return filteredData;
+}
+
 export default function Dashboard() {
     console.clear();
-    const myName = "Testing10";
+    const myName = "Peaks";
     const second = 1;
     const frames = 30;
     const minute = 60;
@@ -33,7 +55,7 @@ export default function Dashboard() {
                 const cadences = newRunners.cadence;
                 const verticals = newRunners.vo;
                 const overstrides = newRunners.overstriding;
-                setVerticalArray(verticals);
+                setVerticalArray(removeOutliers(verticals));
                 setCadenceArray(cadences);
                 setOverstridingArray(overstrides);
 
@@ -147,17 +169,17 @@ export default function Dashboard() {
     };
 
 
-    let overstriding = {};
-    for (let k in overstridingArray) {
-        if ((parseInt(k) % minute) === 0) {
-            current_key += 1;
-            let c_key = String(current_key);
-            overstriding[c_key] = overstridingArray[k];
-        } else {
-            overstriding[String(current_key)] += overstridingArray[k];
-        }
-    }
-    overstriding = overstridingArray;
+    // let overstriding = {};
+    // for (let k in overstridingArray) {
+    //     if ((parseInt(k) % minute) === 0) {
+    //         current_key += 1;
+    //         let c_key = String(current_key);
+    //         overstriding[c_key] = overstridingArray[k];
+    //     } else {
+    //         overstriding[String(current_key)] += overstridingArray[k];
+    //     }
+    // }
+    let overstriding = overstridingArray;
     const OVERSTRIDING_BOUNDARY = 7; // Adjust this value as needed
     let overstriding_colors = [];
     for (let k in overstriding) {
@@ -170,7 +192,7 @@ export default function Dashboard() {
 
     const overstridingData = {
         colors: overstriding_colors,
-        data: overstridingArray,
+        data: overstriding,
         title: 'Overstriding',
         labels: { 'x': 'time (min)', 'y': 'Overstride Value' } // Adjust y-label as per your data's unit
     };
@@ -190,6 +212,10 @@ export default function Dashboard() {
         title: 'Vertical Oscillation',
         labels: { 'x': 'time (min)', 'y': 'Oscillation (cm)' }
     };
+    // console.log('verticalArray', verticalArray);
+    // console.log('cadenceArray', cadenceArray);
+    // console.log('overstridingArray', overstridingArray);
+
     return (
         <Sidebar>
             <Head>
