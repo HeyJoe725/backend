@@ -8,8 +8,9 @@ import ScatterGraph from '../components/dashboard/scatterchart.component'
 import Runner from '../components/runner'
 import styles from '../styles/dashboard.css'
 import GraphType from '../components/dashboard/graphtype.component'
+import TextInput from '../components/dashboard/textinput.component'
 // import DataTypeSelector from '../components/dashboard/datatypeselector.component'
-
+import Modal from '../components/dashboard/modal.component'
 
 function removeOutliers(dataObj, k = 1.5) {
     const values = Object.values(dataObj);
@@ -32,8 +33,10 @@ function removeOutliers(dataObj, k = 1.5) {
     return filteredData;
 }
 
+
+
 export default function Dashboard() {
-    console.clear();
+    // console.clear();
     const myName = "Peaks";
     const second = 1;
     const frames = 30;
@@ -45,25 +48,45 @@ export default function Dashboard() {
     const [showScatter, setShowScatter] = useState(false);
     const [framesPerSecond, setFramesPerSecond] = useState(300);
     const [currentDataType, setCurrentDataType] = useState('cadence');
+    const [inputValue, setInputValue] = useState('');
+    const [showPopup, setShowPopup] = useState(false);
+    const [popupMessage, setPopupMessage] = useState('');
 
-
-    useEffect(() => {
-        async function fetchRunners() {
-            try {
-                const res = await fetch(`/api/runners?name=${myName}`)
-                const newRunners = await res.json();
-                const cadences = newRunners.cadence;
-                const verticals = newRunners.vo;
-                const overstrides = newRunners.overstriding;
-                setVerticalArray(removeOutliers(verticals));
-                setCadenceArray(cadences);
-                setOverstridingArray(overstrides);
-
-            } catch (error) {
-                console.error("Error fetching runners:", error);
+    const handleRunnerNameChange = (newValue) => {
+        setInputValue(newValue);
+    };
+    const handleSearchClick = () => {
+        fetchRunners(inputValue);
+    };
+    async function fetchRunners(name) {
+        try {
+            const res = await fetch(`/api/runners?name=${name}`)
+            const newRunners = await res.json();
+            if (!newRunners || Object.keys(newRunners).length === 0) {
+                console.log("No runners found, showing popup.");
+                setPopupMessage('Runner not found in the database.');
+                setShowPopup(true);
+                return;
             }
+
+
+            const cadences = newRunners.cadence;
+            const verticals = newRunners.vo;
+            const overstrides = newRunners.overstriding;
+            setVerticalArray(removeOutliers(verticals));
+            setCadenceArray(cadences);
+            setOverstridingArray(overstrides);
+
+        } catch (error) {
+            // console.log("Error fetching runners:", error);
+            setPopupMessage('Error fetching runners. Please try again later.');
+            setShowPopup(true);
         }
-        fetchRunners();
+
+    }
+    useEffect(() => {
+
+        // fetchRunners();
     }, []);
 
 
@@ -218,11 +241,31 @@ export default function Dashboard() {
 
     return (
         <Sidebar>
+            {showPopup &&
+                <Modal show={showPopup} onClose={() => setShowPopup(false)}>
+                    <p>{popupMessage}</p>
+                </Modal>
+            }
             <Head>
                 <title>Dashboard</title>
             </Head>
+
             <main className=''>
+
                 <RecentData />
+                <div className="flex space-x-4 pl-4">
+                    <TextInput
+                        placeholder="Enter name..."
+                        onInputChange={(value) => handleRunnerNameChange(value)}
+                        onEnterPress={() => handleSearchClick()}
+                    />
+                    <button
+                        className="p-2 bg-blue-500 text-white rounded"
+                        onClick={handleSearchClick}
+                    >
+                        Search
+                    </button>
+                </div>
                 <div className='p-4 grid md:grid-cols-4 grid-cols-1 gap-4'>
 
 
@@ -322,10 +365,6 @@ export default function Dashboard() {
             </div>
         </Sidebar>
     );
-
-
-
-
 }
 
 
