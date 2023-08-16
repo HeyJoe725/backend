@@ -293,13 +293,11 @@ export default function Dashboard() {
                 <div className='p-3 grid md:grid-cols-4 grid-cols-1 gap-4'>
 
                     <div className='grid grid-cols-3 col-span-3' >
-
-                        <div className='col-span-3' >
+                        <div className='col-span-3 flex flex-col'>
                             {/* Data type selector */}
-                            <p className='text-black text-bold place-content-center bg-green-200 p-2 rounded-t' >Data Type</p>
+                            <p className='text-black text-bold text-center bg-green-200 p-2 rounded-t' >Data Type</p>
 
-                            <div className="flex border-black border">
-
+                            <div className="flex border-black border justify-between space-x-4 pl-20 pr-20">
                                 <button
                                     onClick={() => {
                                         setCurrentDataType('vertical oscillation');
@@ -312,7 +310,6 @@ export default function Dashboard() {
                                     Vertical Oscillation
                                 </button>
 
-
                                 <button
                                     onClick={() => {
                                         setCurrentDataType('overstriding');
@@ -324,6 +321,7 @@ export default function Dashboard() {
                                 >
                                     Overstriding
                                 </button>
+
                                 <button
                                     onClick={() => {
                                         setCurrentDataType('cadence');
@@ -342,10 +340,11 @@ export default function Dashboard() {
 
 
 
+
                         <div className="w-full bg-gray-100 md:col-span-2 relative m-auto rounded-lg p-5 mt-2 ">
                             {
                                 currentDataType === 'vertical oscillation' ? (
-                                    <div className="flex justify-center space-x-2 " >
+                                    <div className="flex justify-center space-x-2 text-black text-bold" >
                                         <p>Graph Type</p>
                                         <GraphType
                                             onTypeChange={(type) => setShowScatter(type === 'scatter')}
@@ -420,7 +419,7 @@ export default function Dashboard() {
                         <div className="w-full h-full md:col-span-1 relative m-auto rounded-lg pl-3 pt-2 ">
                             <div >
                                 {/* Show Descriptive Data */}
-                                <p className='text-bold place-content-center bg-green-200 p-3 rounded-t' >
+                                <p className='text-bold place-content-center bg-green-200 p-3 rounded-t text-black' >
 
                                     {currentDataType === 'vertical oscillation' ? 'Vertical Oscillation' : null}
                                     {currentDataType === 'overstriding' ? 'Overstriding' : null}
@@ -465,17 +464,17 @@ export default function Dashboard() {
                                         </div>
 
                                         {currentDataType === 'vertical oscillation' && vo_descriptive.std !== null ? (
-                                            <div className='border lg:text-base text-xs p-2'>
+                                            <div className='border lg:text-base text-xs p-2 text-black text-bold'>
                                                 <p> {`Optimal Vertical Oscillation: 5 to 10 cm`}</p>
                                             </div>
                                         ) : null}
                                         {currentDataType === 'overstriding' && overstriding_descriptive.std !== null ? (
-                                            <div className='border lg:text-base text-xs p-2'>
+                                            <div className='border lg:text-base text-xs p-2 text-black text-bold'>
                                                 <p> {`Optimal Knee Flexion: 0° to 7°`}</p>
                                             </div>
                                         ) : null}
                                         {currentDataType === 'cadence' && cadence_descriptive.std !== null ? (
-                                            <div className='border lg:text-base text-xs p-2'>
+                                            <div className='border lg:text-base text-xs p-2 text-black text-bold'>
                                                 <p> {`Optimal cadence: 150 to 170 steps/min`}</p>
                                             </div>
                                         ) : null}
@@ -496,12 +495,12 @@ export default function Dashboard() {
                             <>
                                 <Image src="/images/overstriding.png" alt="Picture of the author" width={1000} height={852} />
                                 <div className='pt-7'>
-                                    <div className='flex justify-between bg-pink-400 text-white p-2 '>
+                                    <div className='flex justify-between bg-pink-400 text-white p-2 text-bold'>
                                         Potencial Risks:
                                     </div>
 
                                     {currentDataType === 'overstriding' && cadence_descriptive.mean !== null ? (
-                                        <div className='border p-3'>
+                                        <div className='border p-3 text-black text-bold'>
                                             <p>Patellofemoral pain syndrome</p>
                                             <p>Stress on the joints, especially the knees.</p>
 
@@ -515,12 +514,12 @@ export default function Dashboard() {
                             <div>
                                 <Image src="/images/verticalOscillation.png" alt="Vertical Oscillation" width={1000} height={852} />
                                 <div className='pt-7'>
-                                    <div className='flex justify-between bg-pink-400 text-white p-2 '>
+                                    <div className='flex justify-between bg-pink-400 text-white p-2 text-bold'>
                                         Potencial Risks:
                                     </div>
 
                                     {currentDataType === 'vertical oscillation' && cadence_descriptive.mean !== null ? (
-                                        <div className='border p-3'>
+                                        <div className='border p-3 text-black text-bold'>
                                             <p>Energy wasting due to high vertical movements</p>
                                             <p>Stress on the joints.</p>
 
@@ -532,7 +531,7 @@ export default function Dashboard() {
 
                         {showCadenceImage && (
                             <div className='grid grid-cols-1'>
-                                <p className=''>
+                                <p className='text-black text-bold'>
 
                                     {
                                         cadence_descriptive.mean ? (
@@ -552,12 +551,12 @@ export default function Dashboard() {
                                 <div className=' h-40 '>
                                     <Runner averageCadence={cadence_descriptive.mean} />
                                 </div>
-                                <div className='flex justify-between bg-pink-400 text-white p-2 '>
+                                <div className='flex justify-between bg-pink-400 text-white p-2 text-bold '>
                                     Potencial Risks:
                                 </div>
 
                                 {currentDataType === 'cadence' && cadence_descriptive.mean !== null ? (
-                                    <div className='border p-3'>
+                                    <div className='border p-3 text-black text-bold'>
                                         <p>Stress on the joints, especially the knees.</p>
                                         <p>Low running performance.</p>
 
