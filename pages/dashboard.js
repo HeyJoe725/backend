@@ -289,52 +289,54 @@ export default function Dashboard() {
                         Search
                     </button>
                 </div>
-                <div className='p-4 grid md:grid-cols-4 grid-cols-1 gap-4'>
+                <div className='p-3 grid md:grid-cols-4 grid-cols-1 gap-4'>
 
-                    <div className='w-full bg-gray-50 md:col-span-1 relative m-auto rounded-lg p-6 h-[50vh] lg:h-[75vh] overflow-hidden
-' >
+                    {/* Information about the runner */}
 
+                    <div className={`${styles.card} w-full bg-gray-50 md:col-span-1 relative m-auto rounded-lg p-3 overflow-visible`}>
 
                         {/* Data type selector */}
-                        <p className='text-bold place-content-center bg-green-200 p-2 rounded-t' >Data Type</p>
+                        <div className='flex flex-col'>
+                            <p className='text-bold place-content-center bg-green-200 p-2 rounded-t' >Data Type</p>
 
-                        <div className="flex flex-col space-y-2 p-4 border ">
+                            <div className="flex flex-col space-y-2 p-4 border ">
 
-                            <button
-                                onClick={() => {
-                                    setCurrentDataType('vertical oscillation');
-                                    setShowVerticalOscillationImage(true);
-                                    setShowOverstridingImage(false); // Hide the overstriding image
-                                    setShowCadenceImage(false); // Hide the cadence image
-                                }}
-                                className={`p-2 rounded focus:outline-none focus:ring-2 focus:ring-offset-2 ${currentDataType === 'vertical oscillation' ? 'bg-black text-white' : 'hover:bg-gray-200 '}`}
-                            >
-                                Vertical Oscillation
-                            </button>
+                                <button
+                                    onClick={() => {
+                                        setCurrentDataType('vertical oscillation');
+                                        setShowVerticalOscillationImage(true);
+                                        setShowOverstridingImage(false); // Hide the overstriding image
+                                        setShowCadenceImage(false); // Hide the cadence image
+                                    }}
+                                    className={`p-2 rounded focus:outline-none focus:ring-2 focus:ring-offset-2 ${currentDataType === 'vertical oscillation' ? 'bg-black text-white' : 'hover:bg-gray-200 '}`}
+                                >
+                                    Vertical Oscillation
+                                </button>
 
 
-                            <button
-                                onClick={() => {
-                                    setCurrentDataType('overstriding');
-                                    setShowOverstridingImage(true);
-                                    setShowVerticalOscillationImage(false); // Hide the vertical oscillation image
-                                    setShowCadenceImage(false); // Hide the cadence image
-                                }}
-                                className={`p-2 rounded focus:outline-none focus:ring-2 focus:ring-offset-2 ${currentDataType === 'overstriding' ? 'bg-black text-white' : 'hover:bg-gray-200 '}`}
-                            >
-                                Overstriding
-                            </button>
-                            <button
-                                onClick={() => {
-                                    setCurrentDataType('cadence');
-                                    setShowCadenceImage(true);  // Show the cadence image
-                                    setShowOverstridingImage(false); // Hide the overstriding image
-                                    setShowVerticalOscillationImage(false); // Hide the vertical oscillation image
-                                }}
-                                className={`p-2 rounded focus:outline-none focus:ring-2 focus:ring-offset-2 ${currentDataType === 'cadence' ? 'bg-black text-white' : 'hover:bg-gray-200'}`}
-                            >
-                                Cadence
-                            </button>
+                                <button
+                                    onClick={() => {
+                                        setCurrentDataType('overstriding');
+                                        setShowOverstridingImage(true);
+                                        setShowVerticalOscillationImage(false); // Hide the vertical oscillation image
+                                        setShowCadenceImage(false); // Hide the cadence image
+                                    }}
+                                    className={`p-2 rounded focus:outline-none focus:ring-2 focus:ring-offset-2 ${currentDataType === 'overstriding' ? 'bg-black text-white' : 'hover:bg-gray-200 '}`}
+                                >
+                                    Overstriding
+                                </button>
+                                <button
+                                    onClick={() => {
+                                        setCurrentDataType('cadence');
+                                        setShowCadenceImage(true);  // Show the cadence image
+                                        setShowOverstridingImage(false); // Hide the overstriding image
+                                        setShowVerticalOscillationImage(false); // Hide the vertical oscillation image
+                                    }}
+                                    className={`p-2 rounded focus:outline-none focus:ring-2 focus:ring-offset-2 ${currentDataType === 'cadence' ? 'bg-black text-white' : 'hover:bg-gray-200'}`}
+                                >
+                                    Cadence
+                                </button>
+                            </div>
                         </div>
 
                         <div>
@@ -347,14 +349,14 @@ export default function Dashboard() {
 
                             </p>
 
-                            <div className="flex flex-col space-y-2 p-4 border ">
+                            <div className="flex flex-col space-y-2 p-2 border ">
 
-                                <div className='text-bold p-3' >
-                                    <div className='flex justify-between bg-pink-400 text-white p-2 '>
+                                <div className='text-bold' >
+                                    <div className='flex justify-between bg-pink-400 text-white p-1 lg:p-2 lg:text-sm text-xs'>
                                         Your Performance:
                                     </div>
                                     {currentDataType === 'vertical oscillation' && vo_descriptive.mean !== null ? (
-                                        <div className='border p-3'>
+                                        <div className='border lg:text-base text-xs p-2'>
 
                                             <p> {`Average: ${vo_descriptive.mean.toFixed(2)} cm`}</p>
                                             <p>{`Standard Deviation: ${vo_descriptive.std.toFixed(2)} cm`}</p>
@@ -362,14 +364,14 @@ export default function Dashboard() {
                                         </div>
                                     ) : null}
                                     {currentDataType === 'overstriding' && overstriding_descriptive.mean !== null ? (
-                                        <div className='border p-3'>
+                                        <div className='border lg:text-base text-xs p-2'>
                                             <p> {`Average: ${overstriding_descriptive.mean.toFixed(2)}°`}</p>
                                             <p>{`Standard Deviation: ${overstriding_descriptive.std.toFixed(2)}°`}</p>
                                         </div>
                                     ) : null}
 
                                     {currentDataType === 'cadence' && cadence_descriptive.mean !== null ? (
-                                        <div className='border p-3'>
+                                        <div className='border lg:text-base text-xs p-2'>
                                             <p> {`Average: ${cadence_descriptive.mean.toFixed(2)} steps/min`}</p>
                                             <p>{`Standard Deviation: ${cadence_descriptive.std.toFixed(2)} steps/min`}</p>
                                         </div>
@@ -378,23 +380,23 @@ export default function Dashboard() {
 
                                 </div>
 
-                                <div className='text-bold p-3' >
-                                    <div className='flex justify-between bg-pink-400 text-white p-2 '>
+                                <div className='text-bold' >
+                                    <div className='flex justify-between bg-pink-400 text-white p-1 lg:p-2 lg:text-sm text-xs'>
                                         Desire Performance:
                                     </div>
 
                                     {currentDataType === 'vertical oscillation' && vo_descriptive.std !== null ? (
-                                        <div className='border p-3'>
+                                        <div className='border lg:text-base text-xs p-2'>
                                             <p> {`Optimal Vertical Oscillation: 5 to 10 cm`}</p>
                                         </div>
                                     ) : null}
                                     {currentDataType === 'overstriding' && overstriding_descriptive.std !== null ? (
-                                        <div className='border p-3'>
+                                        <div className='border lg:text-base text-xs p-2'>
                                             <p> {`Optimal Knee Flexion: 0° to 7°`}</p>
                                         </div>
                                     ) : null}
                                     {currentDataType === 'cadence' && cadence_descriptive.std !== null ? (
-                                        <div className='border p-3'>
+                                        <div className='border lg:text-base text-xs p-2'>
                                             <p> {`Optimal cadence: 150 to 170 steps/min`}</p>
                                         </div>
                                     ) : null}
@@ -409,7 +411,7 @@ export default function Dashboard() {
 
 
 
-                    <div className="w-full  bg-gray-50 md:col-span-2 relative m-auto rounded-lg p-6 h-[50vh] lg:h-[75vh] overflow-hidden">
+                    <div className="w-full  bg-gray-50 md:col-span-2 relative m-auto rounded-lg p-3 ">
                         {
                             currentDataType === 'vertical oscillation' ? (
                                 <div className="flex justify-center space-x-2 " >
@@ -482,7 +484,7 @@ export default function Dashboard() {
                             />
                         )}
                     </div>
-                    <div className="w-full  bg-gray-50 md:col-span-1 content-center items-center  m-auto rounded-lg p-6 h-[10vh] lg:h-[75vh] ">
+                    <div className="w-full  bg-gray-50 md:col-span-1 content-center items-center  m-auto rounded-lg p-6">
                         {showOverstridingImage && (
                             <>
                                 <Image src="/images/overstriding.png" alt="Picture of the author" width={1000} height={852} />
@@ -512,7 +514,7 @@ export default function Dashboard() {
 
                                     {currentDataType === 'vertical oscillation' && cadence_descriptive.mean !== null ? (
                                         <div className='border p-3'>
-                                            <p>Energy wasting due to high vertical move</p>
+                                            <p>Energy wasting due to high vertical movements</p>
                                             <p>Stress on the joints.</p>
 
                                         </div>
