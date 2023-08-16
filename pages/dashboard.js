@@ -492,46 +492,97 @@ export default function Dashboard() {
 
                     <div className="w-full ml-2 p-2 h-full  bg-gray-50 md:col-span-1 content-center items-center  m-auto rounded-lg">
                         {showOverstridingImage && (
-                            <>
-                                <Image src="/images/overstriding.png" alt="Picture of the author" width={1000} height={852} />
-                                <div className='pt-7'>
-                                    <div className='flex justify-between bg-pink-400 text-white p-2 text-bold'>
-                                        Potencial Risks:
-                                    </div>
 
-                                    {currentDataType === 'overstriding' && cadence_descriptive.mean !== null ? (
+                            <>
+                                <p className='text-black text-bold p-2 bg-green-200 rounded-t' >
+
+                                    {
+                                        overstriding_descriptive.mean ? (
+                                            <>
+                                                Your average overstride is {overstriding_descriptive.mean.toFixed(2)}°,
+                                                which is {overstriding_descriptive.mean > 7
+
+                                                    ? 'higher than the optimal knee flexion of 0° to 7°.' : ((overstriding_descriptive.mean <= 7 && overstriding_descriptive.mean >= 0) ? 'optimal.' : 'You are not overstriding good job!.')}
+                                            </>
+                                        )
+                                            : (
+                                                "Overstride data is not available."
+                                            )
+                                    }
+                                </p>
+                                <Image src="/images/overstriding.png" alt="Picture of the author" width={1000} height={852} />
+
+                                {overstriding_descriptive.mean > 7 ? (
+                                    <>
+                                        <div className='flex justify-between bg-pink-400 text-white p-2 text-bold'>
+                                            Potential Risks:
+                                        </div>
                                         <div className='border p-3 text-black text-bold'>
                                             <p>Patellofemoral pain syndrome</p>
                                             <p>Stress on the joints, especially the knees.</p>
 
                                         </div>
-                                    ) : null}
-                                </div>
+                                    </>
+                                ) : (
+                                    <div className='flex justify-between bg-green-400 text-white p-2 text-bold'>
+                                        Well Done!
+                                    </div>
+                                )}
+
                             </>
                         )}
 
                         {showVerticalOscillationImage && (
                             <div>
-                                <Image src="/images/verticalOscillation.png" alt="Vertical Oscillation" width={1000} height={852} />
-                                <div className='pt-7'>
-                                    <div className='flex justify-between bg-pink-400 text-white p-2 text-bold'>
-                                        Potencial Risks:
-                                    </div>
+                                <p
+                                    className='text-black text-bold p-2 bg-green-200 rounded-t'
 
-                                    {currentDataType === 'vertical oscillation' && cadence_descriptive.mean !== null ? (
+                                >
+                                    {
+                                        vo_descriptive.mean ? (
+                                            <>
+
+                                                Your average vertical oscillation is {vo_descriptive.mean.toFixed(2)} cm,
+                                                which is {vo_descriptive.mean < 5
+                                                    ? 'lower than the optimal vertical oscillation of 5 to 10 cm.' : ((vo_descriptive.mean >= 5 && vo_descriptive.mean <= 10) ? 'optimal.' : 'higher than the optimal vertical oscillation of 5 to 10 cm.')}
+                                            </>
+                                        )
+
+                                            : (
+                                                "Vertical oscillation data is not available."
+                                            )
+                                    }
+                                </p>
+
+                                <Image src="/images/verticalOscillation.png" alt="Vertical Oscillation" width={1000} height={852} />
+
+                                {vo_descriptive.mean < 5 || vo_descriptive.mean > 10 ? (
+
+                                    <div>
+                                        <div className='flex justify-between bg-pink-400 text-white p-2 text-bold'>
+                                            Potential Risks:
+                                        </div>
                                         <div className='border p-3 text-black text-bold'>
                                             <p>Energy wasting due to high vertical movements</p>
                                             <p>Stress on the joints.</p>
 
                                         </div>
-                                    ) : null}
-                                </div>
+                                    </div>
+                                ) : (
+
+                                    <div className='flex justify-between bg-green-400 text-white p-2 text-bold'>
+                                        Well Done!
+                                    </div>
+                                )}
+
+
+
                             </div>
                         )}
 
                         {showCadenceImage && (
                             <div className='grid grid-cols-1'>
-                                <p className='text-black text-bold'>
+                                <p className='text-black text-bold p-2 bg-green-200 rounded-t'>
 
                                     {
                                         cadence_descriptive.mean ? (
@@ -551,17 +602,27 @@ export default function Dashboard() {
                                 <div className=' h-40 '>
                                     <Runner averageCadence={cadence_descriptive.mean} />
                                 </div>
-                                <div className='flex justify-between bg-pink-400 text-white p-2 text-bold '>
-                                    Potencial Risks:
-                                </div>
 
-                                {currentDataType === 'cadence' && cadence_descriptive.mean !== null ? (
-                                    <div className='border p-3 text-black text-bold'>
-                                        <p>Stress on the joints, especially the knees.</p>
-                                        <p>Low running performance.</p>
+                                {(cadence_descriptive.mean < 150 || cadence_descriptive.mean > 170) ? (
+                                    <>
+                                        <div className='flex justify-between bg-pink-400 text-white p-2 text-bold'>
+                                            Potential Risks:
+                                        </div>
+                                        <div className='border p-3 text-black text-bold'>
+                                            <p>Stress on the joints, especially the knees.</p>
+                                            <p>Low running performance.</p>
 
-                                    </div>
-                                ) : null}
+                                        </div>
+                                    </>
+                                ) : (
+                                    <>
+
+                                        <div className='flex justify-between bg-green-400 text-white p-2 text-bold'>
+                                            Well Done!
+                                        </div>
+                                    </>
+                                )}
+
                             </div>
 
                         )}
@@ -569,7 +630,7 @@ export default function Dashboard() {
                 </div>
             </main>
 
-        </Sidebar>
+        </Sidebar >
     );
 }
 
