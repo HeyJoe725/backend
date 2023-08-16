@@ -419,7 +419,7 @@ export default function Dashboard() {
                         <div className="w-full h-full md:col-span-1 relative m-auto rounded-lg pl-3 pt-2 ">
                             <div >
                                 {/* Show Descriptive Data */}
-                                <p className='text-bold place-content-center bg-green-200 p-2 rounded-t text-black' >
+                                <p className='text-bold place-content-center bg-green-200 p-3 rounded-t text-black' >
 
                                     {currentDataType === 'vertical oscillation' ? 'Vertical Oscillation' : null}
                                     {currentDataType === 'overstriding' ? 'Overstriding' : null}
@@ -427,7 +427,7 @@ export default function Dashboard() {
 
                                 </p>
 
-                                <div className=" space-y-1 p-2 border-black border ">
+                                <div className=" space-y-2 p-2 border-black border ">
 
                                     <div className='text-bold' >
                                         <div className='flex justify-between bg-pink-400 text-white p-1 lg:p-2 lg:text-sm text-xs'>
@@ -478,18 +478,6 @@ export default function Dashboard() {
                                                 <p> {`Optimal cadence: 150 to 170 steps/min`}</p>
                                             </div>
                                         ) : null}
-                                        {
-                                            cadence_descriptive.mean ? (
-                                                <p className='lg:text-base text-xs p-2'>
-                                                    Your cadence is {cadence_descriptive.mean.toFixed(2)} steps/min,
-                                                    which is {cadence_descriptive.mean < 150
-                                                        ? 'lower than the optimal cadence of 150 to 170 steps/min.' : ((cadence_descriptive.mean >= 150 && cadence_descriptive.mean <= 170) ? 'optimal.' : 'higher than the optimal cadence of 150 to 170 steps/min.')}
-                                                </p>
-                                            )
-                                                : (
-                                                    "Cadence data is not available."
-                                                )}
-
 
                                     </div>
 
