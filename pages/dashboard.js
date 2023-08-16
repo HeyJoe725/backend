@@ -435,7 +435,7 @@ export default function Dashboard() {
                                             Your Performance:
                                         </div>
                                         {currentDataType === 'vertical oscillation' && vo_descriptive.mean !== null ? (
-                                            <div className='border lg:text-base text-xs p-2'>
+                                            <div className='border text-black text-bold lg:text-base text-xs p-2'>
 
                                                 <p> {`Average: ${vo_descriptive.mean.toFixed(2)} cm`}</p>
                                                 <p>{`Standard Deviation: ${vo_descriptive.std.toFixed(2)} cm`}</p>
@@ -443,14 +443,14 @@ export default function Dashboard() {
                                             </div>
                                         ) : null}
                                         {currentDataType === 'overstriding' && overstriding_descriptive.mean !== null ? (
-                                            <div className='border lg:text-base text-xs p-2'>
+                                            <div className='border lg:text-base text-xs p-2 black text-bold'>
                                                 <p> {`Average: ${overstriding_descriptive.mean.toFixed(2)}°`}</p>
                                                 <p>{`Standard Deviation: ${overstriding_descriptive.std.toFixed(2)}°`}</p>
                                             </div>
                                         ) : null}
 
                                         {currentDataType === 'cadence' && cadence_descriptive.mean !== null ? (
-                                            <div className='border lg:text-base text-xs p-2'>
+                                            <div className='border lg:text-base text-xs p-2 black text-bold'>
                                                 <p> {`Average: ${cadence_descriptive.mean.toFixed(2)} steps/min`}</p>
                                                 <p>{`Standard Deviation: ${cadence_descriptive.std.toFixed(2)} steps/min`}</p>
                                             </div>
