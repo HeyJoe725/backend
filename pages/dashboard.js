@@ -11,6 +11,9 @@ import GraphType from '../components/dashboard/graphtype.component'
 import TextInput from '../components/dashboard/textinput.component'
 // import DataTypeSelector from '../components/dashboard/datatypeselector.component'
 import Modal from '../components/dashboard/modal.component'
+import { standardDeviation, mean } from '../utils/utils'
+import Image from 'next/image'
+
 
 function removeOutliers(dataObj, k = 1.5) {
     const values = Object.values(dataObj);
@@ -37,7 +40,6 @@ function removeOutliers(dataObj, k = 1.5) {
 
 export default function Dashboard() {
     // console.clear();
-    const myName = "Peaks";
     const second = 1;
     const frames = 30;
     const minute = 60;
@@ -51,6 +53,15 @@ export default function Dashboard() {
     const [inputValue, setInputValue] = useState('');
     const [showPopup, setShowPopup] = useState(false);
     const [popupMessage, setPopupMessage] = useState('');
+    const [vo_descriptive, setVoDescriptive] = useState({ mean: null, std: null });
+    const [cadence_descriptive, setCadenceDescriptive] = useState({ mean: null, std: null });
+    const [overstriding_descriptive, setOverstridingDescriptive] = useState({ mean: null, std: null });
+    const [showOverstridingImage, setShowOverstridingImage] = useState(false);
+    const [showCadenceImage, setShowCadenceImage] = useState(true);
+    const [showVerticalOscillationImage, setShowVerticalOscillationImage] = useState(false);
+
+
+
 
     const handleRunnerNameChange = (newValue) => {
         setInputValue(newValue);
@@ -63,7 +74,6 @@ export default function Dashboard() {
             const res = await fetch(`/api/runners?name=${name}`)
             const newRunners = await res.json();
             if (!newRunners || Object.keys(newRunners).length === 0) {
-                console.log("No runners found, showing popup.");
                 setPopupMessage('Runner not found in the database.');
                 setShowPopup(true);
                 return;
@@ -71,14 +81,45 @@ export default function Dashboard() {
 
 
             const cadences = newRunners.cadence;
-            const verticals = newRunners.vo;
+            const verticals = removeOutliers(newRunners.vo);
             const overstrides = newRunners.overstriding;
-            setVerticalArray(removeOutliers(verticals));
-            setCadenceArray(cadences);
+            setVerticalArray(verticals);
             setOverstridingArray(overstrides);
 
+            let current_key = 0;
+            let c = {};
+            for (let k in cadences) {
+                if ((parseInt(k) % minute) === 0) {
+                    current_key += 1;
+                    let c_key = String(current_key);
+                    c[c_key] = (cadences[k] * 2);
+                } else {
+                    c[String(current_key)] += (cadences[k] * 2);
+                }
+            }
+            c = removeOutliers(c);
+            setCadenceArray(c);
+
+            const vo_descriptive = {
+                mean: mean(Object.values(verticals)),
+                std: standardDeviation(Object.values(verticals)),
+            };
+            setVoDescriptive(vo_descriptive);
+
+            const cadence_descriptive = {
+                mean: mean(Object.values(c)),
+                std: standardDeviation(Object.values(c)),
+            };
+            setCadenceDescriptive(cadence_descriptive);
+
+            const overstriding_descriptive = {
+                mean: mean(Object.values(overstrides)),
+                std: standardDeviation(Object.values(overstrides)),
+            };
+
+            setOverstridingDescriptive(overstriding_descriptive);
+
         } catch (error) {
-            // console.log("Error fetching runners:", error);
             setPopupMessage('Error fetching runners. Please try again later.');
             setShowPopup(true);
         }
@@ -88,15 +129,6 @@ export default function Dashboard() {
 
         // fetchRunners();
     }, []);
-
-
-    // function secondsToTimeFormat(seconds) {
-    //     const minutes = Math.floor(seconds / 60);
-    //     const secs = Math.floor(seconds) - (minutes * 60);
-    //     const millis = Math.round((seconds - Math.floor(seconds)) * 1000);
-
-    //     return `${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}.${String(millis).padStart(3, '0')}`;
-    // }
 
     function secondsToTimeFormat(seconds, addSeconds = 0) {
         const minutes = Math.floor((seconds + addSeconds) / minute);
@@ -147,24 +179,10 @@ export default function Dashboard() {
     }
 
 
-    let current_key = 0;
-    const c = {};
     const CADENCE_BOUNDARY = 153;
-
-    for (let k in cadenceArray) {
-        if ((parseInt(k) % minute) === 0) {
-            current_key += 1;
-            let c_key = String(current_key);
-            c[c_key] = (cadenceArray[k] * 2);
-        } else {
-            c[String(current_key)] += (cadenceArray[k] * 2);
-        }
-    }
-
-
     let colors = [];
-    for (let k in c) {
-        if (c[k] > CADENCE_BOUNDARY) {
+    for (let k in cadenceArray) {
+        if (cadenceArray[k] > CADENCE_BOUNDARY) {
             colors.push('rgba(0, 255, 8, 0.8)');
         } else {
             colors.push('rgba(255, 0, 0, 0.7)');
@@ -191,40 +209,48 @@ export default function Dashboard() {
         setFramesPerSecond(selectedValue);
     };
 
+    let overstriding_per_time = {};
+    for (let k in overstridingArray) {
+        let peak = Math.floor(parseInt(k) / (frames * minute));
+        if (!(String(peak) in overstriding_per_time)) {
+            overstriding_per_time[String(peak)] = [];
+        }
+        overstriding_per_time[String(peak)].push(overstridingArray[k]);
+    }
 
-    // let overstriding = {};
-    // for (let k in overstridingArray) {
-    //     if ((parseInt(k) % minute) === 0) {
-    //         current_key += 1;
-    //         let c_key = String(current_key);
-    //         overstriding[c_key] = overstridingArray[k];
-    //     } else {
-    //         overstriding[String(current_key)] += overstridingArray[k];
-    //     }
-    // }
-    let overstriding = overstridingArray;
+    for (let k in overstriding_per_time) {
+        let mean = overstriding_per_time[k].reduce((a, b) => a + b, 0) / overstriding_per_time[k].length;
+        overstriding_per_time[k] = mean;
+    }
+
+
+
+
     const OVERSTRIDING_BOUNDARY = 7; // Adjust this value as needed
     let overstriding_colors = [];
-    for (let k in overstriding) {
-        if (overstriding[k] > OVERSTRIDING_BOUNDARY) {
-            overstriding_colors.push('rgba(0, 0, 255, 0.8)');
+    for (let k in overstriding_per_time) {
+        if (overstriding_per_time[k] > OVERSTRIDING_BOUNDARY) {
+            overstriding_colors.push('rgba(255, 0, 0, 0.7)');
+
         } else {
-            overstriding_colors.push('rgba(255, 165, 0, 0.7)');
+            overstriding_colors.push('rgba(0, 255, 8, 0.8)');
+
         }
     }
 
     const overstridingData = {
         colors: overstriding_colors,
-        data: overstriding,
+        data: overstriding_per_time,
         title: 'Overstriding',
-        labels: { 'x': 'time (min)', 'y': 'Overstride Value' } // Adjust y-label as per your data's unit
+        labels: { 'x': 'time (min)', 'y': 'Overstride Value' },// Adjust y-label as per your data's unit
+
     };
 
 
 
     const cadenceData = {
         colors: colors,
-        data: c,
+        data: cadenceArray,
         title: 'Cadence',
         labels: { 'x': 'time (min)', 'y': 'Steps' }
     };
@@ -235,9 +261,6 @@ export default function Dashboard() {
         title: 'Vertical Oscillation',
         labels: { 'x': 'time (min)', 'y': 'Oscillation (cm)' }
     };
-    // console.log('verticalArray', verticalArray);
-    // console.log('cadenceArray', cadenceArray);
-    // console.log('overstridingArray', overstridingArray);
 
     return (
         <Sidebar>
@@ -252,8 +275,8 @@ export default function Dashboard() {
 
             <main className=''>
 
-                <RecentData />
-                <div className="flex space-x-4 pl-4">
+                {/* <RecentData /> */}
+                <div className="flex space-x-4 p-4 bg-zinc-800 justify-center">
                     <TextInput
                         placeholder="Enter name..."
                         onInputChange={(value) => handleRunnerNameChange(value)}
@@ -268,30 +291,117 @@ export default function Dashboard() {
                 </div>
                 <div className='p-4 grid md:grid-cols-4 grid-cols-1 gap-4'>
 
+                    <div>
+
+                        {/* Data type selector */}
+                        <p className='text-bold place-content-center bg-green-200 p-3 rounded-t' >Data Type</p>
+
+                        <div className="flex flex-col space-y-4 p-4 border ">
+
+                            <button
+                                onClick={() => {
+                                    setCurrentDataType('vertical oscillation');
+                                    setShowVerticalOscillationImage(true);
+                                    setShowOverstridingImage(false); // Hide the overstriding image
+                                    setShowCadenceImage(false); // Hide the cadence image
+                                }}
+                                className={`p-2 rounded focus:outline-none focus:ring-2 focus:ring-offset-2 ${currentDataType === 'vertical oscillation' ? 'bg-black text-white' : 'hover:bg-gray-200 '}`}
+                            >
+                                Vertical Oscillation
+                            </button>
 
 
-                    {/* Data type selector */}
-                    <div className="flex flex-col space-y-4 p-4 border rounded">
-                        <p>Data Type</p>
+                            <button
+                                onClick={() => {
+                                    setCurrentDataType('overstriding');
+                                    setShowOverstridingImage(true);
+                                    setShowVerticalOscillationImage(false); // Hide the vertical oscillation image
+                                    setShowCadenceImage(false); // Hide the cadence image
+                                }}
+                                className={`p-2 rounded focus:outline-none focus:ring-2 focus:ring-offset-2 ${currentDataType === 'overstriding' ? 'bg-black text-white' : 'hover:bg-gray-200 '}`}
+                            >
+                                Overstriding
+                            </button>
+                            <button
+                                onClick={() => {
+                                    setCurrentDataType('cadence');
+                                    setShowCadenceImage(true);  // Show the cadence image
+                                    setShowOverstridingImage(false); // Hide the overstriding image
+                                    setShowVerticalOscillationImage(false); // Hide the vertical oscillation image
+                                }}
+                                className={`p-2 rounded focus:outline-none focus:ring-2 focus:ring-offset-2 ${currentDataType === 'cadence' ? 'bg-black text-white' : 'hover:bg-gray-200'}`}
+                            >
+                                Cadence
+                            </button>
+                        </div>
 
-                        <button
-                            onClick={() => setCurrentDataType('vertical oscillation')}
-                            className={`p-2 rounded focus:outline-none focus:ring-2 focus:ring-offset-2 ${currentDataType === 'vertical oscillation' ? 'bg-black text-white' : 'hover:bg-gray-200 '}`}
-                        >
-                            Vertical Oscillation
-                        </button>
-                        <button
-                            onClick={() => setCurrentDataType('overstriding')}
-                            className={`p-2 rounded focus:outline-none focus:ring-2 focus:ring-offset-2 ${currentDataType === 'overstriding' ? 'bg-black text-white' : 'hover:bg-gray-200 '}`}
-                        >
-                            Overstriding
-                        </button>
-                        <button
-                            onClick={() => setCurrentDataType('cadence')}
-                            className={`p-2 rounded focus:outline-none focus:ring-2 focus:ring-offset-2 ${currentDataType === 'cadence' ? 'bg-black text-white' : 'hover:bg-gray-200'}`}
-                        >
-                            Cadence
-                        </button>
+
+                        {/* Show Descriptive Data */}
+                        <p className='text-bold place-content-center bg-green-200 p-3 mt-3 rounded-t' >
+
+                            {currentDataType === 'vertical oscillation' ? 'Vertical Oscillation' : null}
+                            {currentDataType === 'overstriding' ? 'Overstriding' : null}
+                            {currentDataType === 'cadence' ? 'Cadence' : null}
+
+                        </p>
+
+                        <div className="flex flex-col space-y-4 p-4 border ">
+
+                            <div className='text-bold p-3' >
+                                <div className='flex justify-between bg-pink-400 text-white p-2 '>
+                                    Your Performance:
+                                </div>
+                                {currentDataType === 'vertical oscillation' && vo_descriptive.mean !== null ? (
+                                    <div className='border p-3'>
+
+                                        <p> {`Average: ${vo_descriptive.mean.toFixed(2)} cm`}</p>
+                                        <p>{`Standard Deviation: ${vo_descriptive.std.toFixed(2)} cm`}</p>
+
+                                    </div>
+                                ) : null}
+                                {currentDataType === 'overstriding' && overstriding_descriptive.mean !== null ? (
+                                    <div className='border p-3'>
+                                        <p> {`Average: ${overstriding_descriptive.mean.toFixed(2)}°`}</p>
+                                        <p>{`Standard Deviation: ${overstriding_descriptive.std.toFixed(2)}°`}</p>
+                                    </div>
+                                ) : null}
+
+                                {currentDataType === 'cadence' && cadence_descriptive.mean !== null ? (
+                                    <div className='border p-3'>
+                                        <p> {`Average: ${cadence_descriptive.mean.toFixed(2)} steps/min`}</p>
+                                        <p>{`Standard Deviation: ${cadence_descriptive.std.toFixed(2)} steps/min`}</p>
+                                    </div>
+                                ) : null}
+
+
+                            </div>
+
+                            <div className='text-bold p-3' >
+                                <div className='flex justify-between bg-pink-400 text-white p-2 '>
+                                    Desire Performance:
+                                </div>
+
+                                {currentDataType === 'vertical oscillation' && vo_descriptive.std !== null ? (
+                                    <div className='border p-3'>
+                                        <p> {`Optimal Vertical Oscillation: 5 to 10 cm`}</p>
+                                    </div>
+                                ) : null}
+                                {currentDataType === 'overstriding' && overstriding_descriptive.std !== null ? (
+                                    <div className='border p-3'>
+                                        <p> {`Optimal Knee Flexion: 0° to 7°`}</p>
+                                    </div>
+                                ) : null}
+                                {currentDataType === 'cadence' && cadence_descriptive.std !== null ? (
+                                    <div className='border p-3'>
+                                        <p> {`Optimal cadence: 150 to 170 steps/min`}</p>
+                                    </div>
+                                ) : null}
+
+                            </div>
+
+                            <p></p>
+                        </div>
+
                     </div>
 
 
@@ -356,9 +466,99 @@ export default function Dashboard() {
                                         currentDataType === 'vertical oscillation' ? verticalOscillationData.labels :
                                             overstridingData.labels
                                 }
+                                line={
+                                    currentDataType === 'cadence' ? cadenceData.line :
+                                        currentDataType === 'vertical oscillation' ? verticalOscillationData.line :
+                                            overstridingData.line
+                                }
+                                bars={
+                                    currentDataType === 'cadence' ? cadenceData.bars :
+                                        currentDataType === 'vertical oscillation' ? verticalOscillationData.bars :
+                                            overstridingData.bars
+                                }
+
                             />
                         )}
                     </div>
+                    <div className="w-full  bg-gray-50 md:col-span-1 content-center items-center  m-auto rounded-lg p-6 h-[10vh] lg:h-[75vh] ">
+                        {showOverstridingImage && (
+                            <>
+                                <Image src="/images/overstriding.png" alt="Picture of the author" width={1000} height={852} />
+                                <div className='pt-7'>
+                                    <div className='flex justify-between bg-pink-400 text-white p-2 '>
+                                        Potencial Risks:
+                                    </div>
+
+                                    {currentDataType === 'overstriding' && cadence_descriptive.mean !== null ? (
+                                        <div className='border p-3'>
+                                            <p>Patellofemoral pain syndrome</p>
+                                            <p>Stress on the joints, especially the knees.</p>
+
+                                        </div>
+                                    ) : null}
+                                </div>
+                            </>
+                        )}
+
+                        {showVerticalOscillationImage && (
+                            <div>
+                                <Image src="/images/verticalOscillation.png" alt="Vertical Oscillation" width={1000} height={852} />
+                                <div className='pt-7'>
+                                    <div className='flex justify-between bg-pink-400 text-white p-2 '>
+                                        Potencial Risks:
+                                    </div>
+
+                                    {currentDataType === 'vertical oscillation' && cadence_descriptive.mean !== null ? (
+                                        <div className='border p-3'>
+                                            <p>Energy wasting due to high vertical move</p>
+                                            <p>Stress on the joints.</p>
+
+                                        </div>
+                                    ) : null}
+                                </div>
+                            </div>
+                        )}
+
+                        {showCadenceImage && (
+                            // <Runner />
+                            <div className='grid grid-cols-1 row-span-5'>
+                                <p className='p-5 pb-20'>
+
+                                    {
+                                        cadence_descriptive.mean ? (
+                                            <>
+                                                Your cadence is {cadence_descriptive.mean.toFixed(2)} steps/min,
+                                                which is {cadence_descriptive.mean < 150
+                                                    ? 'lower than the optimal cadence of 150 to 170 steps/min.' : ((cadence_descriptive.mean >= 150 && cadence_descriptive.mean <= 170) ? 'optimal.' : 'higher than the optimal cadence of 150 to 170 steps/min.')}
+                                            </>
+                                        )
+                                            : (
+                                                "Cadence data is not available."
+                                            )}
+
+
+                                </p>
+
+                                <div className='pl-20 h-40 w-1/2'>
+                                    <Runner averageCadence={cadence_descriptive.mean} />
+                                </div>
+                                <div className='flex justify-between bg-pink-400 text-white p-2 '>
+                                    Potencial Risks:
+                                </div>
+
+                                {currentDataType === 'cadence' && cadence_descriptive.mean !== null ? (
+                                    <div className='border p-3'>
+                                        <p>Stress on the joints, especially the knees.</p>
+                                        <p>Low running performance.</p>
+
+                                    </div>
+                                ) : null}
+                            </div>
+
+                        )}
+                    </div>
+
+
                 </div>
             </main>
             <div className='p-4 grid md:grid-cols-4 grid-cols-1 gap-4'>

@@ -1,0 +1,17 @@
+
+/* @keyframes runAnimation {
+    0%, 100% { background-position: -200px -10; }
+    50%      { background-position: -2000px 0; }
+} */
+@keyframes runAnimation {
+    0% { background-position: 0px 0; }
+    100% { background-position: -10000px 0; }
+}
+
+.runnerAnimation {
+    width: 500px;
+    height: 633px;
+    overflow: hidden;
+    background: url('/images/combined_image.png') 0 0 no-repeat;
+    animation: runAnimation 6s steps(5) infinite; 
+}

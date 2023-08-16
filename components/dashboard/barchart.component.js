@@ -10,6 +10,7 @@ import {
     Tooltip,
     Legend,
     Title,
+    Filler // <-- Import the Filler plugin here
 } from 'chart.js';
 
 Chart.register(
@@ -20,14 +21,19 @@ Chart.register(
     Tooltip,
     Legend,
     Title,
+    Filler
 );
 
-export default function BarChart({ cadenceArray, title, labels, colors }) {
+export default function BarChart({ cadenceArray, title, labels, colors, line = false, bars = true }) {
+    const generateColorArray = (data) => {
+        const data_ob = Object.values(data);
+        return data_ob.map(value => value < 7 ? 'rgba(0, 255, 0, 0.5)' : 'rgba(255, 0, 0, 0.5)');
+    };
 
     const chartData = {
         labels: [],
         datasets: [
-            {
+            ...(bars ? [{
                 label: title,
                 data: cadenceArray,
                 backgroundColor: colors,
@@ -35,20 +41,20 @@ export default function BarChart({ cadenceArray, title, labels, colors }) {
                     'rgba(255, 99, 132, 1)',
                 ],
                 borderWidth: 0,
-            },
-
-            // {
-            //     type: 'line',
-            //     label: 'Line Dataset',
-            //     data: cadenceArray, // same as bar data for top border
-            //     fill: false,
-            //     borderColor: 'rgb(75, 192, 192)',
-            //     tension: 0.1, // this makes the line smooth
-            //     borderWidth: 2 // thicker line width for emphasis
-            // }
+            }] : []),
+            ...(line ? [{
+                type: 'line',
+                label: 'Line Dataset',
+                data: cadenceArray,
+                fill: true,
+                backgroundColor: generateColorArray(cadenceArray), // Set background color here
+                borderColor: 'rgb(75, 192, 192)',
+                tension: 0.1,
+                borderWidth: 2
+            }] : [])
         ],
-
     };
+
 
     const chartOptions = {
         plugins: {

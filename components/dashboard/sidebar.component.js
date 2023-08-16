@@ -2,6 +2,7 @@ import Link from 'next/link';
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { FaNetworkWired } from 'react-icons/fa';
+
 import { BsFillFileEarmarkPostFill } from 'react-icons/bs';
 import { BiTask } from 'react-icons/bi';
 import DrawerComponent from './drawer.component';
@@ -17,7 +18,7 @@ function Sidebar({ children }) {
         <div className={`transition-all duration-500 ${drawerOpen ? 'pl-12' : ''}`}>
             <DrawerComponent drawerOpen={drawerOpen} setDrawerOpen={setDrawerOpen} />
 
-            <div className='rounded-lg fixed w-15 top-0 left-0 z-20  h-full transition-all duration-500 transform -translate-x-full bg-black shadow-lg peer-checked:translate-x-0 '>
+            <div className='fixed w-15 top-0 left-0 z-20  h-full transition-all duration-500 transform -translate-x-full bg-black shadow-lg peer-checked:translate-x-0 '>
                 <div className='flex flex-col space-y-4 '>
                     <Link href='/'>
                         <div className='bg-blue-100 rounded-lg inline-block text-black'>
