@@ -342,7 +342,7 @@ export default function Dashboard() {
 
 
 
-                        <div className="w-full bg-gray-100 md:col-span-2 relative m-auto rounded-lg p-5 ">
+                        <div className="w-full bg-gray-100 md:col-span-2 relative m-auto rounded-lg p-5 mt-2 ">
                             {
                                 currentDataType === 'vertical oscillation' ? (
                                     <div className="flex justify-center space-x-2 " >
@@ -417,7 +417,7 @@ export default function Dashboard() {
                         </div>
 
                         {/* Information about the runner */}
-                        <div className="w-full h-full md:col-span-1 relative m-auto rounded-lg p-3 ">
+                        <div className="w-full h-full md:col-span-1 relative m-auto rounded-lg pl-3 pt-2 ">
                             <div >
                                 {/* Show Descriptive Data */}
                                 <p className='text-bold place-content-center bg-green-200 p-3 rounded-t' >
