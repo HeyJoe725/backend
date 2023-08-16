@@ -308,7 +308,7 @@ export default function Dashboard() {
                                         setShowOverstridingImage(false); // Hide the overstriding image
                                         setShowCadenceImage(false); // Hide the cadence image
                                     }}
-                                    className={`p-2 rounded focus:outline-none focus:ring-2 focus:ring-offset-2 ${currentDataType === 'vertical oscillation' ? 'bg-black text-white' : 'hover:bg-gray-200 '}`}
+                                    className={`p-2 rounded text-black focus:outline-none focus:ring-2 focus:ring-offset-2 ${currentDataType === 'vertical oscillation' ? 'bg-black text-white' : 'hover:bg-gray-200 '}`}
                                 >
                                     Vertical Oscillation
                                 </button>
