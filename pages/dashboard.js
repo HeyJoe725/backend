@@ -297,9 +297,9 @@ export default function Dashboard() {
 
                         {/* Data type selector */}
                         <div className='flex flex-col'>
-                            <p className='text-bold place-content-center bg-green-200 p-2 rounded-t' >Data Type</p>
+                            <p className='text-black text-bold place-content-center bg-green-200 p-2 rounded-t' >Data Type</p>
 
-                            <div className="flex flex-col space-y-2 p-4 border ">
+                            <div className="flex flex-col space-y-2 p-4 border-black border">
 
                                 <button
                                     onClick={() => {
@@ -321,7 +321,7 @@ export default function Dashboard() {
                                         setShowVerticalOscillationImage(false); // Hide the vertical oscillation image
                                         setShowCadenceImage(false); // Hide the cadence image
                                     }}
-                                    className={`p-2 rounded focus:outline-none focus:ring-2 focus:ring-offset-2 ${currentDataType === 'overstriding' ? 'bg-black text-white' : 'hover:bg-gray-200 '}`}
+                                    className={`p-2 text-black rounded focus:outline-none focus:ring-2 focus:ring-offset-2 ${currentDataType === 'overstriding' ? 'bg-black text-white' : 'hover:bg-gray-200 '}`}
                                 >
                                     Overstriding
                                 </button>
@@ -332,7 +332,7 @@ export default function Dashboard() {
                                         setShowOverstridingImage(false); // Hide the overstriding image
                                         setShowVerticalOscillationImage(false); // Hide the vertical oscillation image
                                     }}
-                                    className={`p-2 rounded focus:outline-none focus:ring-2 focus:ring-offset-2 ${currentDataType === 'cadence' ? 'bg-black text-white' : 'hover:bg-gray-200'}`}
+                                    className={`p-2 text-black rounded focus:outline-none focus:ring-2 focus:ring-offset-2 ${currentDataType === 'cadence' ? 'bg-black text-white' : 'hover:bg-gray-200'}`}
                                 >
                                     Cadence
                                 </button>
@@ -349,7 +349,7 @@ export default function Dashboard() {
 
                             </p>
 
-                            <div className="flex flex-col space-y-2 p-2 border ">
+                            <div className="flex flex-col space-y-2 p-2 border-black border ">
 
                                 <div className='text-bold' >
                                     <div className='flex justify-between bg-pink-400 text-white p-1 lg:p-2 lg:text-sm text-xs'>
