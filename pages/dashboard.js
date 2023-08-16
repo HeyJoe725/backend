@@ -291,12 +291,14 @@ export default function Dashboard() {
                 </div>
                 <div className='p-4 grid md:grid-cols-4 grid-cols-1 gap-4'>
 
-                    <div>
+                    <div className='w-full bg-gray-50 md:col-span-1 relative m-auto rounded-lg p-6 h-[50vh] lg:h-[75vh] overflow-hidden
+' >
+
 
                         {/* Data type selector */}
-                        <p className='text-bold place-content-center bg-green-200 p-3 rounded-t' >Data Type</p>
+                        <p className='text-bold place-content-center bg-green-200 p-2 rounded-t' >Data Type</p>
 
-                        <div className="flex flex-col space-y-4 p-4 border ">
+                        <div className="flex flex-col space-y-2 p-4 border ">
 
                             <button
                                 onClick={() => {
@@ -335,71 +337,71 @@ export default function Dashboard() {
                             </button>
                         </div>
 
+                        <div>
+                            {/* Show Descriptive Data */}
+                            <p className='text-bold place-content-center bg-green-200 p-3 mt-3 rounded-t' >
 
-                        {/* Show Descriptive Data */}
-                        <p className='text-bold place-content-center bg-green-200 p-3 mt-3 rounded-t' >
+                                {currentDataType === 'vertical oscillation' ? 'Vertical Oscillation' : null}
+                                {currentDataType === 'overstriding' ? 'Overstriding' : null}
+                                {currentDataType === 'cadence' ? 'Cadence' : null}
 
-                            {currentDataType === 'vertical oscillation' ? 'Vertical Oscillation' : null}
-                            {currentDataType === 'overstriding' ? 'Overstriding' : null}
-                            {currentDataType === 'cadence' ? 'Cadence' : null}
+                            </p>
 
-                        </p>
+                            <div className="flex flex-col space-y-2 p-4 border ">
 
-                        <div className="flex flex-col space-y-4 p-4 border ">
-
-                            <div className='text-bold p-3' >
-                                <div className='flex justify-between bg-pink-400 text-white p-2 '>
-                                    Your Performance:
-                                </div>
-                                {currentDataType === 'vertical oscillation' && vo_descriptive.mean !== null ? (
-                                    <div className='border p-3'>
-
-                                        <p> {`Average: ${vo_descriptive.mean.toFixed(2)} cm`}</p>
-                                        <p>{`Standard Deviation: ${vo_descriptive.std.toFixed(2)} cm`}</p>
-
+                                <div className='text-bold p-3' >
+                                    <div className='flex justify-between bg-pink-400 text-white p-2 '>
+                                        Your Performance:
                                     </div>
-                                ) : null}
-                                {currentDataType === 'overstriding' && overstriding_descriptive.mean !== null ? (
-                                    <div className='border p-3'>
-                                        <p> {`Average: ${overstriding_descriptive.mean.toFixed(2)}°`}</p>
-                                        <p>{`Standard Deviation: ${overstriding_descriptive.std.toFixed(2)}°`}</p>
-                                    </div>
-                                ) : null}
+                                    {currentDataType === 'vertical oscillation' && vo_descriptive.mean !== null ? (
+                                        <div className='border p-3'>
 
-                                {currentDataType === 'cadence' && cadence_descriptive.mean !== null ? (
-                                    <div className='border p-3'>
-                                        <p> {`Average: ${cadence_descriptive.mean.toFixed(2)} steps/min`}</p>
-                                        <p>{`Standard Deviation: ${cadence_descriptive.std.toFixed(2)} steps/min`}</p>
-                                    </div>
-                                ) : null}
+                                            <p> {`Average: ${vo_descriptive.mean.toFixed(2)} cm`}</p>
+                                            <p>{`Standard Deviation: ${vo_descriptive.std.toFixed(2)} cm`}</p>
+
+                                        </div>
+                                    ) : null}
+                                    {currentDataType === 'overstriding' && overstriding_descriptive.mean !== null ? (
+                                        <div className='border p-3'>
+                                            <p> {`Average: ${overstriding_descriptive.mean.toFixed(2)}°`}</p>
+                                            <p>{`Standard Deviation: ${overstriding_descriptive.std.toFixed(2)}°`}</p>
+                                        </div>
+                                    ) : null}
+
+                                    {currentDataType === 'cadence' && cadence_descriptive.mean !== null ? (
+                                        <div className='border p-3'>
+                                            <p> {`Average: ${cadence_descriptive.mean.toFixed(2)} steps/min`}</p>
+                                            <p>{`Standard Deviation: ${cadence_descriptive.std.toFixed(2)} steps/min`}</p>
+                                        </div>
+                                    ) : null}
 
 
-                            </div>
-
-                            <div className='text-bold p-3' >
-                                <div className='flex justify-between bg-pink-400 text-white p-2 '>
-                                    Desire Performance:
                                 </div>
 
-                                {currentDataType === 'vertical oscillation' && vo_descriptive.std !== null ? (
-                                    <div className='border p-3'>
-                                        <p> {`Optimal Vertical Oscillation: 5 to 10 cm`}</p>
+                                <div className='text-bold p-3' >
+                                    <div className='flex justify-between bg-pink-400 text-white p-2 '>
+                                        Desire Performance:
                                     </div>
-                                ) : null}
-                                {currentDataType === 'overstriding' && overstriding_descriptive.std !== null ? (
-                                    <div className='border p-3'>
-                                        <p> {`Optimal Knee Flexion: 0° to 7°`}</p>
-                                    </div>
-                                ) : null}
-                                {currentDataType === 'cadence' && cadence_descriptive.std !== null ? (
-                                    <div className='border p-3'>
-                                        <p> {`Optimal cadence: 150 to 170 steps/min`}</p>
-                                    </div>
-                                ) : null}
+
+                                    {currentDataType === 'vertical oscillation' && vo_descriptive.std !== null ? (
+                                        <div className='border p-3'>
+                                            <p> {`Optimal Vertical Oscillation: 5 to 10 cm`}</p>
+                                        </div>
+                                    ) : null}
+                                    {currentDataType === 'overstriding' && overstriding_descriptive.std !== null ? (
+                                        <div className='border p-3'>
+                                            <p> {`Optimal Knee Flexion: 0° to 7°`}</p>
+                                        </div>
+                                    ) : null}
+                                    {currentDataType === 'cadence' && cadence_descriptive.std !== null ? (
+                                        <div className='border p-3'>
+                                            <p> {`Optimal cadence: 150 to 170 steps/min`}</p>
+                                        </div>
+                                    ) : null}
+
+                                </div>
 
                             </div>
-
-                            <p></p>
                         </div>
 
                     </div>
