@@ -529,6 +529,8 @@ export default function Dashboard() {
                                     </div>
                                 )}
 
+
+
                             </>
                         )}
 
@@ -623,9 +625,20 @@ export default function Dashboard() {
                                     </>
                                 )}
 
+
                             </div>
 
                         )}
+                        <div
+                            className='flex flex-col justify-between bg-green-400 text-white m-2 p-2 text-bold'
+                        >
+                            Improvement Tips:
+
+                            <div className='border p-3 text-black text-bold text-xs lg:text-sm'>
+                                <p>Increase your cadence (the number of steps).</p>
+
+                            </div>
+                        </div>
                     </div>
                 </div>
             </main>
