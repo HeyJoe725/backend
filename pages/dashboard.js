@@ -289,17 +289,16 @@ export default function Dashboard() {
                         Search
                     </button>
                 </div>
+
                 <div className='p-3 grid md:grid-cols-4 grid-cols-1 gap-4'>
 
-                    {/* Information about the runner */}
+                    <div className='grid grid-cols-3 col-span-3' >
 
-                    <div className={`${styles.card} w-full bg-gray-50 md:col-span-1 relative m-auto rounded-lg p-3 overflow-visible`}>
-
-                        {/* Data type selector */}
-                        <div className='flex flex-col'>
+                        <div className='col-span-3' >
+                            {/* Data type selector */}
                             <p className='text-black text-bold place-content-center bg-green-200 p-2 rounded-t' >Data Type</p>
 
-                            <div className="flex flex-col space-y-2 p-4 border-black border">
+                            <div className="flex border-black border">
 
                                 <button
                                     onClick={() => {
@@ -321,7 +320,7 @@ export default function Dashboard() {
                                         setShowVerticalOscillationImage(false); // Hide the vertical oscillation image
                                         setShowCadenceImage(false); // Hide the cadence image
                                     }}
-                                    className={`p-2 text-black rounded focus:outline-none focus:ring-2 focus:ring-offset-2 ${currentDataType === 'overstriding' ? 'bg-black text-white' : 'hover:bg-gray-200 '}`}
+                                    className={`p-2 rounded text-black  focus:outline-none focus:ring-2 focus:ring-offset-2 ${currentDataType === 'overstriding' ? 'bg-black text-white' : 'hover:bg-gray-200 '}`}
                                 >
                                     Overstriding
                                 </button>
@@ -339,152 +338,160 @@ export default function Dashboard() {
                             </div>
                         </div>
 
-                        <div>
-                            {/* Show Descriptive Data */}
-                            <p className='text-bold place-content-center bg-green-200 p-3 mt-3 rounded-t' >
 
-                                {currentDataType === 'vertical oscillation' ? 'Vertical Oscillation' : null}
-                                {currentDataType === 'overstriding' ? 'Overstriding' : null}
-                                {currentDataType === 'cadence' ? 'Cadence' : null}
 
-                            </p>
 
-                            <div className="flex flex-col space-y-2 p-2 border-black border ">
 
-                                <div className='text-bold' >
-                                    <div className='flex justify-between bg-pink-400 text-white p-1 lg:p-2 lg:text-sm text-xs'>
-                                        Your Performance:
+                        <div className="w-full bg-gray-100 md:col-span-2 relative m-auto rounded-lg p-3 ">
+                            {
+                                currentDataType === 'vertical oscillation' ? (
+                                    <div className="flex justify-center space-x-2 " >
+                                        <p>Graph Type</p>
+                                        <GraphType
+                                            onTypeChange={(type) => setShowScatter(type === 'scatter')}
+                                        />
                                     </div>
-                                    {currentDataType === 'vertical oscillation' && vo_descriptive.mean !== null ? (
-                                        <div className='border lg:text-base text-xs p-2'>
+                                ) : null
+                            }
+                            {!showScatter && currentDataType === 'vertical oscillation' && (
+                                <div className="absolute top-14 right-4 z-20">
+                                    <label htmlFor="framesPerSecond" className="block text-sm font-medium text-gray-700 mb-2">
+                                        {framesPerSecond === 1800 ? "time(minutes: 1)" : `time(seconds: ${framesPerSecond / 30})`}
+                                    </label>
 
-                                            <p> {`Average: ${vo_descriptive.mean.toFixed(2)} cm`}</p>
-                                            <p>{`Standard Deviation: ${vo_descriptive.std.toFixed(2)} cm`}</p>
-
-                                        </div>
-                                    ) : null}
-                                    {currentDataType === 'overstriding' && overstriding_descriptive.mean !== null ? (
-                                        <div className='border lg:text-base text-xs p-2'>
-                                            <p> {`Average: ${overstriding_descriptive.mean.toFixed(2)}°`}</p>
-                                            <p>{`Standard Deviation: ${overstriding_descriptive.std.toFixed(2)}°`}</p>
-                                        </div>
-                                    ) : null}
-
-                                    {currentDataType === 'cadence' && cadence_descriptive.mean !== null ? (
-                                        <div className='border lg:text-base text-xs p-2'>
-                                            <p> {`Average: ${cadence_descriptive.mean.toFixed(2)} steps/min`}</p>
-                                            <p>{`Standard Deviation: ${cadence_descriptive.std.toFixed(2)} steps/min`}</p>
-                                        </div>
-                                    ) : null}
-
-
-                                </div>
-
-                                <div className='text-bold' >
-                                    <div className='flex justify-between bg-pink-400 text-white p-1 lg:p-2 lg:text-sm text-xs'>
-                                        Desire Performance:
+                                    <div className="relative">
+                                        <input
+                                            type="range"
+                                            id="framesPerSecond"
+                                            name="framesPerSecond"
+                                            min="1"
+                                            max={validValues.length}
+                                            value={validValues.indexOf(framesPerSecond) + 1}
+                                            className={styles.slider}
+                                            onChange={handleSliderChange}
+                                        />
                                     </div>
-
-                                    {currentDataType === 'vertical oscillation' && vo_descriptive.std !== null ? (
-                                        <div className='border lg:text-base text-xs p-2'>
-                                            <p> {`Optimal Vertical Oscillation: 5 to 10 cm`}</p>
-                                        </div>
-                                    ) : null}
-                                    {currentDataType === 'overstriding' && overstriding_descriptive.std !== null ? (
-                                        <div className='border lg:text-base text-xs p-2'>
-                                            <p> {`Optimal Knee Flexion: 0° to 7°`}</p>
-                                        </div>
-                                    ) : null}
-                                    {currentDataType === 'cadence' && cadence_descriptive.std !== null ? (
-                                        <div className='border lg:text-base text-xs p-2'>
-                                            <p> {`Optimal cadence: 150 to 170 steps/min`}</p>
-                                        </div>
-                                    ) : null}
-
                                 </div>
+                            )}
 
-                            </div>
+                            {(showScatter && (currentDataType === 'vertical oscillation')) ? (
+                                scatterDataPoints.length > 0 ?
+                                    <ScatterGraph data={scatterDataPoints} title="Vertical Displacement" labels={{ x: "time", y: "Vertical Displacement (cm)" }} />
+                                    :
+                                    <div className="flex justify-center items-center h-full text-lg font-semibold">Loading graph...</div>
+                            ) : (
+                                <BarChart
+                                    colors={
+                                        currentDataType === 'cadence' ? cadenceData.colors :
+                                            currentDataType === 'vertical oscillation' ? verticalOscillationData.colors :
+                                                overstridingData.colors
+                                    }
+                                    cadenceArray={
+                                        currentDataType === 'cadence' ? cadenceData.data :
+                                            currentDataType === 'vertical oscillation' ? verticalOscillationData.data :
+                                                overstridingData.data
+                                    }
+                                    title={
+                                        currentDataType === 'cadence' ? cadenceData.title :
+                                            currentDataType === 'vertical oscillation' ? verticalOscillationData.title :
+                                                overstridingData.title
+                                    }
+                                    labels={
+                                        currentDataType === 'cadence' ? cadenceData.labels :
+                                            currentDataType === 'vertical oscillation' ? verticalOscillationData.labels :
+                                                overstridingData.labels
+                                    }
+                                    line={
+                                        currentDataType === 'cadence' ? cadenceData.line :
+                                            currentDataType === 'vertical oscillation' ? verticalOscillationData.line :
+                                                overstridingData.line
+                                    }
+                                    bars={
+                                        currentDataType === 'cadence' ? cadenceData.bars :
+                                            currentDataType === 'vertical oscillation' ? verticalOscillationData.bars :
+                                                overstridingData.bars
+                                    }
+
+                                />
+                            )}
                         </div>
 
-                    </div>
+                        {/* Information about the runner */}
+                        <div className="w-full md:col-span-1 relative m-auto rounded-lg p-3 ">
+                            <div >
+                                {/* Show Descriptive Data */}
+                                <p className='text-bold place-content-center bg-green-200 p-3 rounded-t' >
+
+                                    {currentDataType === 'vertical oscillation' ? 'Vertical Oscillation' : null}
+                                    {currentDataType === 'overstriding' ? 'Overstriding' : null}
+                                    {currentDataType === 'cadence' ? 'Cadence' : null}
+
+                                </p>
+
+                                <div className=" space-y-2 p-2 border-black border ">
+
+                                    <div className='text-bold' >
+                                        <div className='flex justify-between bg-pink-400 text-white p-1 lg:p-2 lg:text-sm text-xs'>
+                                            Your Performance:
+                                        </div>
+                                        {currentDataType === 'vertical oscillation' && vo_descriptive.mean !== null ? (
+                                            <div className='border lg:text-base text-xs p-2'>
+
+                                                <p> {`Average: ${vo_descriptive.mean.toFixed(2)} cm`}</p>
+                                                <p>{`Standard Deviation: ${vo_descriptive.std.toFixed(2)} cm`}</p>
+
+                                            </div>
+                                        ) : null}
+                                        {currentDataType === 'overstriding' && overstriding_descriptive.mean !== null ? (
+                                            <div className='border lg:text-base text-xs p-2'>
+                                                <p> {`Average: ${overstriding_descriptive.mean.toFixed(2)}°`}</p>
+                                                <p>{`Standard Deviation: ${overstriding_descriptive.std.toFixed(2)}°`}</p>
+                                            </div>
+                                        ) : null}
+
+                                        {currentDataType === 'cadence' && cadence_descriptive.mean !== null ? (
+                                            <div className='border lg:text-base text-xs p-2'>
+                                                <p> {`Average: ${cadence_descriptive.mean.toFixed(2)} steps/min`}</p>
+                                                <p>{`Standard Deviation: ${cadence_descriptive.std.toFixed(2)} steps/min`}</p>
+                                            </div>
+                                        ) : null}
 
 
+                                    </div>
 
+                                    <div className='text-bold' >
+                                        <div className='flex justify-between bg-pink-400 text-white p-1 lg:p-2 lg:text-sm text-xs'>
+                                            Desire Performance:
+                                        </div>
 
-                    <div className="w-full  bg-gray-50 md:col-span-2 relative m-auto rounded-lg p-3 ">
-                        {
-                            currentDataType === 'vertical oscillation' ? (
-                                <div className="flex justify-center space-x-2 " >
-                                    <p>Graph Type</p>
-                                    <GraphType
-                                        onTypeChange={(type) => setShowScatter(type === 'scatter')}
-                                    />
-                                </div>
-                            ) : null
-                        }
-                        {!showScatter && currentDataType === 'vertical oscillation' && (
-                            <div className="absolute top-14 right-4 z-20">
-                                <label htmlFor="framesPerSecond" className="block text-sm font-medium text-gray-700 mb-2">
-                                    {framesPerSecond === 1800 ? "time(minutes: 1)" : `time(seconds: ${framesPerSecond / 30})`}
-                                </label>
+                                        {currentDataType === 'vertical oscillation' && vo_descriptive.std !== null ? (
+                                            <div className='border lg:text-base text-xs p-2'>
+                                                <p> {`Optimal Vertical Oscillation: 5 to 10 cm`}</p>
+                                            </div>
+                                        ) : null}
+                                        {currentDataType === 'overstriding' && overstriding_descriptive.std !== null ? (
+                                            <div className='border lg:text-base text-xs p-2'>
+                                                <p> {`Optimal Knee Flexion: 0° to 7°`}</p>
+                                            </div>
+                                        ) : null}
+                                        {currentDataType === 'cadence' && cadence_descriptive.std !== null ? (
+                                            <div className='border lg:text-base text-xs p-2'>
+                                                <p> {`Optimal cadence: 150 to 170 steps/min`}</p>
+                                            </div>
+                                        ) : null}
 
-                                <div className="relative">
-                                    <input
-                                        type="range"
-                                        id="framesPerSecond"
-                                        name="framesPerSecond"
-                                        min="1"
-                                        max={validValues.length}
-                                        value={validValues.indexOf(framesPerSecond) + 1}
-                                        className={styles.slider}
-                                        onChange={handleSliderChange}
-                                    />
+                                    </div>
+
                                 </div>
                             </div>
-                        )}
 
-                        {(showScatter && (currentDataType === 'vertical oscillation')) ? (
-                            scatterDataPoints.length > 0 ?
-                                <ScatterGraph data={scatterDataPoints} title="Vertical Displacement" labels={{ x: "time", y: "Vertical Displacement (cm)" }} />
-                                :
-                                <div className="flex justify-center items-center h-full text-lg font-semibold">Loading graph...</div>
-                        ) : (
-                            <BarChart
-                                colors={
-                                    currentDataType === 'cadence' ? cadenceData.colors :
-                                        currentDataType === 'vertical oscillation' ? verticalOscillationData.colors :
-                                            overstridingData.colors
-                                }
-                                cadenceArray={
-                                    currentDataType === 'cadence' ? cadenceData.data :
-                                        currentDataType === 'vertical oscillation' ? verticalOscillationData.data :
-                                            overstridingData.data
-                                }
-                                title={
-                                    currentDataType === 'cadence' ? cadenceData.title :
-                                        currentDataType === 'vertical oscillation' ? verticalOscillationData.title :
-                                            overstridingData.title
-                                }
-                                labels={
-                                    currentDataType === 'cadence' ? cadenceData.labels :
-                                        currentDataType === 'vertical oscillation' ? verticalOscillationData.labels :
-                                            overstridingData.labels
-                                }
-                                line={
-                                    currentDataType === 'cadence' ? cadenceData.line :
-                                        currentDataType === 'vertical oscillation' ? verticalOscillationData.line :
-                                            overstridingData.line
-                                }
-                                bars={
-                                    currentDataType === 'cadence' ? cadenceData.bars :
-                                        currentDataType === 'vertical oscillation' ? verticalOscillationData.bars :
-                                            overstridingData.bars
-                                }
+                        </div>
 
-                            />
-                        )}
+
                     </div>
-                    <div className="w-full  bg-gray-50 md:col-span-1 content-center items-center  m-auto rounded-lg p-6">
+
+
+                    <div className="w-full ml-2 p-2  bg-gray-50 md:col-span-1 content-center items-center  m-auto rounded-lg">
                         {showOverstridingImage && (
                             <>
                                 <Image src="/images/overstriding.png" alt="Picture of the author" width={1000} height={852} />
@@ -524,9 +531,8 @@ export default function Dashboard() {
                         )}
 
                         {showCadenceImage && (
-                            // <Runner />
-                            <div className='grid grid-cols-1 row-span-5'>
-                                <p className='p-5 pb-20'>
+                            <div className='grid grid-cols-1'>
+                                <p className=''>
 
                                     {
                                         cadence_descriptive.mean ? (
@@ -543,7 +549,7 @@ export default function Dashboard() {
 
                                 </p>
 
-                                <div className='pl-20 h-40 w-1/2'>
+                                <div className=' h-40 '>
                                     <Runner averageCadence={cadence_descriptive.mean} />
                                 </div>
                                 <div className='flex justify-between bg-pink-400 text-white p-2 '>
@@ -561,12 +567,9 @@ export default function Dashboard() {
 
                         )}
                     </div>
-
-
                 </div>
             </main>
-            <div className='p-4 grid md:grid-cols-4 grid-cols-1 gap-4'>
-            </div>
+
         </Sidebar>
     );
 }
