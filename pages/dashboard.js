@@ -342,7 +342,7 @@ export default function Dashboard() {
 
 
 
-                        <div className="w-full bg-gray-100 md:col-span-2 relative m-auto rounded-lg p-3 ">
+                        <div className="w-full bg-gray-100 md:col-span-2 relative m-auto rounded-lg p-5 ">
                             {
                                 currentDataType === 'vertical oscillation' ? (
                                     <div className="flex justify-center space-x-2 " >
@@ -417,7 +417,7 @@ export default function Dashboard() {
                         </div>
 
                         {/* Information about the runner */}
-                        <div className="w-full md:col-span-1 relative m-auto rounded-lg p-3 ">
+                        <div className="w-full h-full md:col-span-1 relative m-auto rounded-lg p-3 ">
                             <div >
                                 {/* Show Descriptive Data */}
                                 <p className='text-bold place-content-center bg-green-200 p-3 rounded-t' >
@@ -491,7 +491,7 @@ export default function Dashboard() {
                     </div>
 
 
-                    <div className="w-full ml-2 p-2  bg-gray-50 md:col-span-1 content-center items-center  m-auto rounded-lg">
+                    <div className="w-full ml-2 p-2 h-full  bg-gray-50 md:col-span-1 content-center items-center  m-auto rounded-lg">
                         {showOverstridingImage && (
                             <>
                                 <Image src="/images/overstriding.png" alt="Picture of the author" width={1000} height={852} />
