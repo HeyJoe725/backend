@@ -147,7 +147,7 @@ export default function Dashboard() {
             if (!(t in maps)) {
                 maps.push({ x: t, y: [] });
             }
-            maps[t].y.push(point.y);
+            maps[t]?.y.push(point.y);
         });
 
         maps = maps.map(point => {
@@ -591,7 +591,7 @@ export default function Dashboard() {
                                             <>
                                                 Your cadence is {cadence_descriptive.mean.toFixed(2)} steps/min,
                                                 which is {cadence_descriptive.mean < 150
-                                                    ? 'lower than the optimal cadence of 150 to 170 steps/min.' : ((cadence_descriptive.mean >= 150 && cadence_descriptive.mean <= 170) ? 'optimal.' : 'higher than the optimal cadence of 150 to 170 steps/min.')}
+                                                    ? 'lower than the optimal cadence of 150 to 170 steps/min.' : ((cadence_descriptive.mean >= 150 && cadence_descriptive.mean <= 170) ? 'optimal.' : 'higher than the optimal cadence of 150 to 170 steps/min. Well Done!')}
                                             </>
                                         )
                                             : (
@@ -605,7 +605,7 @@ export default function Dashboard() {
                                     <Runner averageCadence={cadence_descriptive.mean} />
                                 </div>
 
-                                {(cadence_descriptive.mean < 150 || cadence_descriptive.mean > 170) ? (
+                                {(cadence_descriptive.mean < 150) ? (
                                     <>
                                         <div className='flex justify-between bg-pink-400 text-white p-2 text-bold'>
                                             Potential Risks:
