@@ -48,7 +48,7 @@ export default function Dashboard() {
     const [verticalArray, setVerticalArray] = useState([]);
     const [overstridingArray, setOverstridingArray] = useState([]);
     const [showScatter, setShowScatter] = useState(false);
-    const [framesPerSecond, setFramesPerSecond] = useState(300);
+    const [framesPerSecond, setFramesPerSecond] = useState(1800);
     const [currentDataType, setCurrentDataType] = useState('cadence');
     const [inputValue, setInputValue] = useState('');
     const [showPopup, setShowPopup] = useState(false);
