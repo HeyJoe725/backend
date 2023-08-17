@@ -297,7 +297,7 @@ export default function Dashboard() {
                             {/* Data type selector */}
                             <p className='text-black text-bold text-center bg-green-200 p-2 rounded-t' >Data Type</p>
 
-                            <div className="flex border-black border justify-between space-x-4 pl-20 pr-20">
+                            <div className="flex border-black bg-gray-100 justify-between space-x-4 pl-20 pr-20">
                                 <button
                                     onClick={() => {
                                         setCurrentDataType('vertical oscillation');
@@ -305,7 +305,7 @@ export default function Dashboard() {
                                         setShowOverstridingImage(false); // Hide the overstriding image
                                         setShowCadenceImage(false); // Hide the cadence image
                                     }}
-                                    className={`p-2 rounded text-black focus:outline-none focus:ring-2 focus:ring-offset-2 ${currentDataType === 'vertical oscillation' ? 'bg-black text-white' : 'hover:bg-gray-200 '}`}
+                                    className={`p-2 m-2 rounded border bg-blue-400 text-black focus:outline-none focus:ring-2 focus:ring-offset-2 ${currentDataType === 'vertical oscillation' ? 'bg-black text-white' : 'hover:bg-gray-200 '}`}
                                 >
                                     Vertical Oscillation
                                 </button>
@@ -317,7 +317,7 @@ export default function Dashboard() {
                                         setShowVerticalOscillationImage(false); // Hide the vertical oscillation image
                                         setShowCadenceImage(false); // Hide the cadence image
                                     }}
-                                    className={`p-2 rounded text-black  focus:outline-none focus:ring-2 focus:ring-offset-2 ${currentDataType === 'overstriding' ? 'bg-black text-white' : 'hover:bg-gray-200 '}`}
+                                    className={`p-2 m-2 border bg-blue-400 rounded text-black  focus:outline-none focus:ring-2 focus:ring-offset-2 ${currentDataType === 'overstriding' ? 'bg-black text-white' : 'hover:bg-gray-200 '}`}
                                 >
                                     Overstriding
                                 </button>
@@ -329,7 +329,7 @@ export default function Dashboard() {
                                         setShowOverstridingImage(false); // Hide the overstriding image
                                         setShowVerticalOscillationImage(false); // Hide the vertical oscillation image
                                     }}
-                                    className={`p-2 text-black rounded focus:outline-none focus:ring-2 focus:ring-offset-2 ${currentDataType === 'cadence' ? 'bg-black text-white' : 'hover:bg-gray-200'}`}
+                                    className={`p-2 m-2 border bg-blue-400 text-black rounded focus:outline-none focus:ring-2 focus:ring-offset-2 ${currentDataType === 'cadence' ? 'bg-black text-white' : 'hover:bg-gray-200'}`}
                                 >
                                     Cadence
                                 </button>
@@ -475,7 +475,8 @@ export default function Dashboard() {
                                         ) : null}
                                         {currentDataType === 'cadence' && cadence_descriptive.std !== null ? (
                                             <div className='border lg:text-base text-xs p-2 text-black text-bold'>
-                                                <p> {`Optimal cadence: 150 to 170 steps/min`}</p>
+                                                <p> {`Recomended cadence: 150 to 170 steps/min`}</p>
+                                                <p> {`Optimal cadence: >170 steps/min`}</p>
                                             </div>
                                         ) : null}
 
@@ -591,7 +592,7 @@ export default function Dashboard() {
                                             <>
                                                 Your cadence is {cadence_descriptive.mean.toFixed(2)} steps/min,
                                                 which is {cadence_descriptive.mean < 150
-                                                    ? 'lower than the optimal cadence of 150 to 170 steps/min.' : ((cadence_descriptive.mean >= 150 && cadence_descriptive.mean <= 170) ? 'optimal.' : 'higher than the optimal cadence of 150 to 170 steps/min. Well Done!')}
+                                                    ? 'lower than the recomended cadence of 150 to 170 steps/min.' : ((cadence_descriptive.mean >= 150 && cadence_descriptive.mean <= 170) ? 'optimal.' : 'higher than 150 to 170 steps/min, which is optimal!.')}
                                             </>
                                         )
                                             : (

@@ -1,7 +1,6 @@
 import { Bar, Line } from 'react-chartjs-2';
 
 import {
-
     Chart,
     CategoryScale,
     LinearScale,
@@ -10,7 +9,7 @@ import {
     Tooltip,
     Legend,
     Title,
-    Filler // <-- Import the Filler plugin here
+    Filler
 } from 'chart.js';
 
 Chart.register(
@@ -34,7 +33,7 @@ export default function BarChart({ cadenceArray, title, labels, colors, line = f
         labels: [],
         datasets: [
             ...(bars ? [{
-                label: title,
+                label: 'Average', // This is the title that is green
                 data: cadenceArray,
                 backgroundColor: colors,
                 borderColor: [
@@ -43,18 +42,21 @@ export default function BarChart({ cadenceArray, title, labels, colors, line = f
                 borderWidth: 0,
             }] : []),
             ...(line ? [{
-                type: 'line',
-                label: 'Line Dataset',
-                data: cadenceArray,
-                fill: true,
-                backgroundColor: generateColorArray(cadenceArray), // Set background color here
-                borderColor: 'rgb(75, 192, 192)',
-                tension: 0.1,
-                borderWidth: 2
-            }] : [])
+                label: 'low cadence', // Added this label that is red
+                backgroundColor: 'red',
+            }] : []),
+            // ...(line ? [{
+            //     type: 'line',
+            //     label: 'Line Dataset',
+            //     data: cadenceArray,
+            //     fill: true,
+            //     backgroundColor: generateColorArray(cadenceArray),
+            //     borderColor: 'rgb(75, 192, 192)',
+            //     tension: 0.1,
+            //     borderWidth: 2
+            // }] : [])
         ],
     };
-
 
     const chartOptions = {
         plugins: {
@@ -90,11 +92,9 @@ export default function BarChart({ cadenceArray, title, labels, colors, line = f
         },
     };
 
-
     return (
         <div className='w-full bg-gray-50 w-full md:col-span-2 relative m-auto rounded-lg p-4 h-[50vh] lg:h-[70vh]'>
             <Bar data={chartData} options={chartOptions} />
         </div>
     );
 }
-
