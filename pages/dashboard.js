@@ -421,9 +421,9 @@ export default function Dashboard() {
                                 {/* Show Descriptive Data */}
                                 <p className='text-bold place-content-center bg-green-200 p-3 rounded-t text-black' >
 
-                                    {currentDataType === 'vertical oscillation' ? 'Vertical Oscillation' : null}
-                                    {currentDataType === 'overstriding' ? 'Overstriding' : null}
-                                    {currentDataType === 'cadence' ? 'Cadence' : null}
+                                    {currentDataType === 'vertical oscillation' ? 'Vertical Oscillation: It is the up-and-down movement of a runner\'s body during running.' : null}
+                                    {currentDataType === 'overstriding' ? 'Overstriding: It is when a runner\'s foot lands too far in front of their body during a stride, often causing inefficient running and potential injury.' : null}
+                                    {currentDataType === 'cadence' ? 'Cadence: It is the number of steps you take in one minute.' : null}
 
                                 </p>
 
@@ -636,7 +636,7 @@ export default function Dashboard() {
                             Improvement Tips:
 
                             <div className='border p-3 text-black text-bold text-xs lg:text-sm'>
-                                <p>Increase your cadence (the number of steps).</p>
+                                <p>Increase your cadence (the number of steps per minute).</p>
 
                             </div>
                         </div>
