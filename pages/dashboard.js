@@ -11,7 +11,7 @@ import GraphType from '../components/dashboard/graphtype.component'
 import TextInput from '../components/dashboard/textinput.component'
 // import DataTypeSelector from '../components/dashboard/datatypeselector.component'
 import Modal from '../components/dashboard/modal.component'
-import { standardDeviation, mean } from '../utils/utils'
+import { standardDeviation, mean, saveToCSV } from '../utils/utils'
 import Image from 'next/image'
 
 
@@ -66,8 +66,10 @@ export default function Dashboard() {
     const handleRunnerNameChange = (newValue) => {
         setInputValue(newValue);
     };
-    const handleSearchClick = () => {
-        fetchRunners(inputValue);
+    const handleSearchClick = (newValue) => {
+        setInputValue(newValue);
+
+        fetchRunners(newValue);
     };
     async function fetchRunners(name) {
         try {
@@ -118,6 +120,7 @@ export default function Dashboard() {
             };
 
             setOverstridingDescriptive(overstriding_descriptive);
+
 
         } catch (error) {
             setPopupMessage('Error fetching runners. Please try again later.');
@@ -279,8 +282,8 @@ export default function Dashboard() {
                 <div className="flex space-x-4 p-4 bg-zinc-800 justify-center">
                     <TextInput
                         placeholder="Enter name..."
-                        onInputChange={(value) => handleRunnerNameChange(value)}
-                        onEnterPress={() => handleSearchClick()}
+                        // onInputChange={(value) => handleRunnerNameChange(value)}
+                        onEnterPress={(newValue) => handleSearchClick(newValue)}
                     />
                     <button
                         className="p-2 bg-blue-500 text-white rounded"
@@ -331,6 +334,7 @@ export default function Dashboard() {
                                     }}
                                     className={`p-2 m-2 border bg-blue-400 text-black rounded focus:outline-none focus:ring-2 focus:ring-offset-2 ${currentDataType === 'cadence' ? 'bg-black text-white' : 'hover:bg-gray-200'}`}
                                 >
+                                    {/* Cadence {(cadenceData.data, verticalOscillationData.data, overstridingData.data, `${inputValue} data.csv`)} */}
                                     Cadence
                                 </button>
                             </div>

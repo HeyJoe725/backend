@@ -7,6 +7,7 @@ export default function Next() {
         'Next.js API Routes': 'https://nextjs.org/docs/pages/building-your-application/routing/api-routes',
         'Next.js API Routes Tutorial': 'https://nextjs.org/learn/basics/api-routes',
         'Next.js API Routes Deployment': 'https://nextjs.org/docs/deployment#api-routes',
+        'AWS': 'https://vercel.com/templates/next.js/aws-s3-image-upload-nextjs',
 
     }
 

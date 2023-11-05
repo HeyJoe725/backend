@@ -15,6 +15,12 @@ function TextInput({ placeholder, onInputChange, onEnterPress }) {
     const handleKeyDown = (e) => {
         if (e.key === 'Enter' && onEnterPress) {
             onEnterPress(text);
+            // const value = e.target.value;
+            // setText(value);
+
+            // if (onInputChange) {
+            //     onInputChange(value);
+            // }
         }
     };
 
